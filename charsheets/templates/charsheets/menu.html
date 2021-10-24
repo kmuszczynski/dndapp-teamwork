@@ -1,0 +1,13 @@
+{% extends 'charsheets/base.html' %}
+
+{% block content %}
+
+<h2>A gigantic list of currently implemented Features:</h2>
+<h3>List of your, and only your, characters:</h3>
+<ul>
+    {% for character in characters %}
+    <a href="{% url 'viewcharacter' character.id %}"><li>{{ character }}</li></a>
+    {% endfor %}
+</ul>
+
+{% endblock %}
