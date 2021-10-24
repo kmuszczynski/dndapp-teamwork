@@ -11,7 +11,7 @@ technologies used: django, channels
 - [x] Working Database Demo
 - [x] Working Chat Demo
 - [x] Merge the two
-- [ ] But still keep them working
+- [x] But still keep them working
 - [ ] Implement chat features
 - [ ] Implement database access from chat level
 - [ ] Finish and fill up the database

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'chat',
     'channels',
     'charsheets',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

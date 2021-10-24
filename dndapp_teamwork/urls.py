@@ -14,7 +14,7 @@ urlpatterns = [
     path('chat/', include('chat.urls')),
 
     # charsheets
-    path('charsheets/', include('charsheets.urls')),
+    path('', include('charsheets.urls')),
 
     # admin
     path('admin/', admin.site.urls),
