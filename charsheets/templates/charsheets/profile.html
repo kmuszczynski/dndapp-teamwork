@@ -1,0 +1,11 @@
+{% extends "home/base.html" %}
+
+{% block header %}
+<a class="login_link" href="{% url 'home' %}">Home</a>
+<a class="login_link" href="{% url 'logout' %}">Logout</a>
+{% endblock header %}
+
+{% block main %}
+<h1>{{user.username}}</h1>
+<a href="{% url 'menu' %}">Characters List</a>
+{% endblock main %}

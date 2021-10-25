@@ -1,0 +1,14 @@
+{% extends 'home/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button type="submit">Login</button>
+        <a href="{% url 'singup' %}">Sing Up Now</a>
+        <a href="{% url 'home' %}">Back</a>
+    </form>
+</div>
+{% endblock main %}

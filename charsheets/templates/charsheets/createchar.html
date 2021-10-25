@@ -1,9 +1,7 @@
-{% extends 'charsheets/base.html' %}
-
+{% extends 'home/base.html' %}
 {% load crispy_forms_tags %}
 
-{% block content %}
-
+{% block main %}
 <h1>Create new character</h1>
 
 <form method="POST">
@@ -11,7 +9,5 @@
     {{ form|crispy }}
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
-
-
-{% endblock %}
+{% endblock main %}
 

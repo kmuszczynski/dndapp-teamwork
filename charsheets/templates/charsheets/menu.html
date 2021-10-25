@@ -1,7 +1,6 @@
-{% extends 'charsheets/base.html' %}
+{% extends 'home/base.html' %}
 
-{% block content %}
-
+{% block main %}
 <h2>A gigantic list of currently implemented Features:</h2>
 <h3>List of your, and only your, characters:</h3>
 <ul>
@@ -9,5 +8,6 @@
     <a href="{% url 'viewcharacter' character.id %}"><li>{{ character }}</li></a>
     {% endfor %}
 </ul>
-
-{% endblock %}
+<a href="{% url 'createchar' %}">Create Character</a>
+<a href="{% url 'profile' %}">Profile</a>
+{% endblock main %}
