@@ -3,6 +3,7 @@
 
 {% block main %}
 <div>
+    <h3>Sing up</h3>
     <form method="POST">
         {% csrf_token %}
         {{form|crispy}}
