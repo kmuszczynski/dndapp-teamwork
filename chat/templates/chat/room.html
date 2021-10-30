@@ -8,17 +8,21 @@
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
 <body>
-    <a class="leaveButton" href="{% url 'chat' %}">Leave Room</a>
-    <div class="container">
-        <div id="chat-log"></div>
+    <a class="leaveutton" href="{% url 'chat' %}">Leave Room</a>
+    <div id="chat-wrap">
+        <div class="container">
+            <div id="chat-log-wrapper">
+                <div id="chat-log">
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <input class="textInput" id="chat-message-input" type="text" size="100"><br>
+            <input class="button" id="chat-message-submit" type="button" value="Send">
+            {{ room_name|json_script:"room-name" }}
+        </div>
     </div>
-    
-    <div class="container">
-        <input class="textInput" id="chat-message-input" type="text" size="100"><br>
-        <input class="button" id="chat-message-submit" type="button" value="Send">
-        {{ room_name|json_script:"room-name" }}
-    </div>
-    
     <script src="{% static 'room.js' %}"></script>
 
 </body>

@@ -1,6 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
+from datetime import datetime
 
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
@@ -23,17 +25,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)
 		message = text_data_json['message']
-
+		date = datetime.now()
+		minutes = date.minute
+		if date.minute == "":
+			minutes = "00"
+		elif len(str(date.minute))==1:
+			minutes = "0" + str(date.minute)
 		await self.channel_layer.group_send(
 			self.room_group_name,
 			{
 				'type': 'chat_message',
 				'message': message,
+				'user': str(self.scope["user"]),
+				'date': "%s:%s" % (date.hour, minutes),
 			})
 
 	async def chat_message(self, event):
-		message = event['message']
+		msg = event['message']
+		msgDate = event['date']
+		msgAuth = event['user']
 
 		await self.send(text_data=json.dumps({
-			'message': message,
-		}))
+			'messageDateSent': msgDate,
+			'messageAuthor': msgAuth,
+			'message': msg,
+		}, default=str))
+		
+	@database_sync_to_async
+	def save_chat(self,message):
+		if 'AnonymousUser' != str(self.scope["user"]):
+			room = Room.objects.last()
+			msg = ChatMessage.objects.create(room=room,user=self.scope["user"],message=message)
+		return True
