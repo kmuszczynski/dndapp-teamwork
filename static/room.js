@@ -1,14 +1,6 @@
 const chatLog = document.querySelector('#chat-log')
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
-if (!chatLog.hasChildNodes()) {
-    const emptyText = document.createElement('h3')
-    emptyText.id = 'emptyText'
-    emptyText.innerText = 'No Messages'
-    emptyText.className = 'emptyText'
-    chatLog.appendChild(emptyText)
-}
-
 const chatSocket = new WebSocket(
     'ws://'
     + window.location.host

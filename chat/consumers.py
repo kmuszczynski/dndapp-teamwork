@@ -3,6 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
 from datetime import datetime
+from .models import Chat, ChatRoom
 
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
@@ -31,6 +32,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			minutes = "00"
 		elif len(str(date.minute))==1:
 			minutes = "0" + str(date.minute)
+
+		room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
+
+		chat = Chat(
+                    content=message,
+                    user=self.scope['user'],
+                    room=room,
+               		timestamp="[%s:%s]" % (date.hour, minutes)
+                )
+
+		await database_sync_to_async(chat.save)()
+
 		await self.channel_layer.group_send(
 			self.room_group_name,
 			{
@@ -50,10 +63,3 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			'messageAuthor': msgAuth,
 			'message': msg,
 		}, default=str))
-		
-	@database_sync_to_async
-	def save_chat(self,message):
-		if 'AnonymousUser' != str(self.scope["user"]):
-			room = Room.objects.last()
-			msg = ChatMessage.objects.create(room=room,user=self.scope["user"],message=message)
-		return True

@@ -12,7 +12,7 @@ technologies used: django, channels
 - [x] Working Chat Demo
 - [x] Merge the two
 - [x] But still keep them working
-- [ ] Implement chat features
-- [ ] Implement database access from chat level
+- [x] Implement chat features
+- [x] Implement database access from chat level
 - [ ] Finish and fill up the database
 - [ ] Front-end
