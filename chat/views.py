@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Chat, ChatRoom
+from charsheets.models import Character
 
 @login_required
 def index(request):
@@ -10,6 +11,7 @@ def index(request):
 def room(request, room_name):
     room=ChatRoom.objects.filter(name=room_name).first()
     chats=[]
+    characters = Character.objects.filter(user=request.user)
 
     if room:
         chats=Chat.objects.filter(room=room)
@@ -19,5 +21,6 @@ def room(request, room_name):
 
     return render(request, 'chat/room.html', {
         'room_name': room_name,
-        'chats': chats
+        'chats': chats,
+        'characters': characters
     })
