@@ -27,5 +27,3 @@ class Character(models.Model):
 
     def __str__(self):
         return f"{self.name} - lvl {self.level} {self.race} {self.combat_class}"
-
-
