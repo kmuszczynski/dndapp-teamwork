@@ -31,6 +31,13 @@
             {{ room_name|json_script:"room-name" }}
         </div>  
     </div>
+    <div id="charsheet-wrap">
+        <ul>
+            {% for character in characters %}
+            <li>{{ character }}</li>
+            {% endfor %}
+        </ul>
+    </div>
     <script src="{% static 'room.js' %}"></script>
 
     <div class="container">
@@ -43,7 +50,6 @@
     
     <div class="container">
         {% if character %}
-            {{ character }}
             <form method="POST">
                 {% csrf_token %}
                 {{ form|crispy }}
