@@ -22,10 +22,6 @@ def room(request, room_name):
         character=get_object_or_404(Character, pk=request.POST.get("list"))
         form=CharacterForm(instance=character)
 
-
-    else:
-        characterListForm = CharacterList()
-
     if room:
         chats=Chat.objects.filter(room=room)
     else:
