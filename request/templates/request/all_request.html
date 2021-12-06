@@ -1,0 +1,19 @@
+{% extends 'home/base.html' %}
+
+{% block main %}
+<h3>All Request</h3>
+<ul>
+    {% for request in requests %}
+        <li>{{request}}
+            <a href="{% url 'moreinfo' request.id %}">more</a>
+            <form method="POST">
+                {%csrf_token%}
+                <input type="hidden" name="request_id" value={{request.id}}>
+                <input type="submit" value="accept" name="status">
+                <input type="submit" value="reject" name="status">
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+<a class="login_link" href="{% url 'home' %}">Home</a>
+{% endblock main %}

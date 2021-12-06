@@ -11,5 +11,8 @@
 {% endblock header %}
 
 {% block chat %}
-<a href="{% url 'chat' %}">Chat</a>
+<a href="{% url 'chat' %}">Create Game</a>
+<a href="{% url 'addrequest' %}">Request Add To Room</a>
+<a href="{% url 'viewallrequest' %}">View all Requests</a>
+<a href="{% url 'allrooms' %}">View all rooms</a>
 {% endblock chat %}

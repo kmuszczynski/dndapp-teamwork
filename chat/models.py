@@ -1,17 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from charsheets.models import Character
 from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.fields import CharField, TextField
-from django.contrib.auth.models import User
-'''
-class Message(models.Model):
-    messgID = models.AutoField(primary_key=True)
-    userID = models.ForeignKey(User,verbose_name="userID",on_delete=models.PROTECT)
-    message = models.CharField(max_length=256)
-    msgSentDate= models.TimeField(auto_now=False,auto_now_add=True)
-    sessionID = models.ForeignKey(Session,verbose_name="SessionID",on_delete=models.CASCADE,null=False)
-
-'''
 
 class Chat(models.Model):
     content=models.CharField(max_length=100)
@@ -23,7 +14,20 @@ class Chat(models.Model):
         return "{} {}".format(self.timestamp, self.user)
 
 class ChatRoom(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
+    #on_delete zależy od tego czy damy możliwość usunięcia użytkownika do zmiany !!!!
+    gamemaster = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    
+    #Fajna opcja do przemyślenia na później
+    #player_list = models.ManyToManyField(Character, related_name='room', blank=True)
+    #request_list = models.ManyToManyField(Character, related_name='request', blank=True)
 
     def __str__(self):
         return "{}".format(self.name)
+
+class CharacterBelongsToRoom(models.Model):
+    room = models.ForeignKey('ChatRoom', on_delete=models.CASCADE)
+    character = models.ForeignKey(Character, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.room.name} ({self.character.name})"

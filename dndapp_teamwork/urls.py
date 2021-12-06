@@ -30,4 +30,7 @@ urlpatterns = [
 
     # admin
     path('admin/', admin.site.urls),
+
+    # request
+    path('request/', include('request.urls')),
 ]

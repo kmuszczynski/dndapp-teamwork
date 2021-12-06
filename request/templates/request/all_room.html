@@ -1,0 +1,16 @@
+{% extends 'home/base.html' %}
+
+{% block main %}
+<p>
+    GM room:
+    {% for room in gm_room %}
+        <br><a href="{% url 'room' room.name %}">{{room}}</a>
+    {% endfor %}
+    <br>
+    Game room:
+    {% for room in characters_room %}
+        <br><a href="{% url 'room' room.room.name %}">{{room}}</a>
+    {% endfor %}
+</p>
+<a class="login_link" href="{% url 'home' %}">Home</a>
+{% endblock main %}

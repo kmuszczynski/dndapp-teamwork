@@ -3,10 +3,20 @@ from django.contrib.auth.decorators import login_required
 from .models import Chat, ChatRoom
 from charsheets.models import Character
 from charsheets.forms import CharacterList, CharacterForm
+from .forms import CreateRoomForm
 
 @login_required
-def index(request):
-    return render(request, 'chat/index.html', {})
+def create_chat_room(request):
+    if request.method=='POST':
+        form = CreateRoomForm(request.POST)
+        if form.is_valid():
+            newRoom = form.save(commit=False)
+            newRoom.gamemaster = request.user
+            newRoom.save()
+            return redirect("home")
+    else:
+        form = CreateRoomForm()
+    return render(request, 'chat/create_chat_room.html', {'form': form})
 
 @login_required
 def room(request, room_name):
