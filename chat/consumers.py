@@ -4,6 +4,7 @@ from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
 from datetime import datetime
 from .models import Chat, ChatRoom
+from .utils import run_commands
 
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
@@ -36,7 +37,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
 
 		chat = Chat(
-                    content=message,
+                    content=run_commands(message),
                     user=self.scope['user'],
                     room=room,
                		timestamp="[%s:%s]" % (date.hour, minutes)
