@@ -17,7 +17,7 @@
                     {% for chat in chats.all %}
                         <div class="messageContainer">
                             <p class="messageDate">{{chat.timestamp}}</p>
-                            <p class="messageUser">{{chat.user}}</p>
+                            <p class="messageUser">{{chat.user}}:</p>
                             <p class="messageContent">{{chat.content}}</p>
                         </div>
                     {% endfor %}

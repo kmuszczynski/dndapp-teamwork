@@ -37,7 +37,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
 
 		chat = Chat(
-                    content=run_commands(message),
+					content=message,
+                    #content=run_commands(message),
                     user=self.scope['user'],
                     room=room,
                		timestamp="[%s:%s]" % (date.hour, minutes)

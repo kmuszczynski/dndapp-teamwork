@@ -15,7 +15,7 @@ chatSocket.onmessage = function(e) {
     messageContainer.className = 'messageContainer'
 
     const messageUser = document.createElement('p')
-    messageUser.innerText = data.messageAuthor+":"
+    messageUser.innerText = " "+data.messageAuthor+": "
     messageUser.className = 'messageUser'
 
     const messageDate = document.createElement('p')
@@ -49,9 +49,32 @@ document.querySelector('#chat-message-input').onkeyup = function(e) {
     }
 };
 
+function run_commands(message) {
+    var command = message.split(' ');
+    if (command[0] = '/roll' && message.charAt(0)=='/' && command[1].includes('d')) {
+        var dice = command[1].split('d');
+        if (dice.length != 2 || (dice[0] == "" || dice[1] == "") || (isNaN(dice[0]) || isNaN(dice[1]))) return message;
+        
+        var n = parseInt(dice[0], 10);
+        var d = parseInt(dice[1], 10);
+        var arr = [];
+        var sum = 0;
+        
+        for (var i = 0; i < n; i++){
+            var v = Math.floor((Math.random() * d) + 1);
+            sum = sum + v;
+            arr.push(v);
+        }
+
+        return `Rolling ${n}d${d}: [${arr}] SUM: ${sum}`;
+    }
+    return message;
+}
+
 document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
-    const message = messageInputDom.value;
+    var message = run_commands(messageInputDom.value);
+    
     chatSocket.send(JSON.stringify({
         'message': message
     }));
