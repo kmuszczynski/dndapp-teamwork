@@ -5,6 +5,7 @@ from .forms import CreateRequestAddToRoomForm
 from charsheets.models import Character
 from chat.models import CharacterBelongsToRoom, ChatRoom
 from .models import UserToRoomRequest
+from .fun import create_CharacterBelongsToRoom
 
 # Create your views here.
 
@@ -37,15 +38,7 @@ def viewAllRequest(request):
     if request.method == 'POST':
         getRequest = UserToRoomRequest.objects.get(pk=int(request.POST.get("request_id")))
         if request.POST.get("status") == "accept":
-            user_characters=CharacterBelongsToRoom.objects.filter(room=getRequest.room)
-            if len(user_characters)==0:
-                CharacterBelongsToRoom.objects.create(room=getRequest.room, character=getRequest.character, status=1)
-            else:
-                user_characters=CharacterBelongsToRoom.objects.filter(room=getRequest.room).filter(character__user=getRequest.character.user)
-                if len(user_characters)==0:
-                    CharacterBelongsToRoom.objects.create(room=getRequest.room, character=getRequest.character, status=1)
-                else:
-                    CharacterBelongsToRoom.objects.create(room=getRequest.room, character=getRequest.character, status=2)
+            create_CharacterBelongsToRoom(getRequest)
         getRequest.delete()
     return render(request, 'request/all_request.html', {'requests': requests})
 
@@ -54,7 +47,7 @@ def more_info_about_request_user_to_room(request, request_pk):
     getRequest=UserToRoomRequest.objects.get(pk=request_pk)
     if request.method == 'POST':
         if request.POST.get("status") == "accept":
-            CharacterBelongsToRoom.objects.create(room=getRequest.room, character=getRequest.character)
+            create_CharacterBelongsToRoom(getRequest)
         getRequest.delete()
         return redirect('viewallrequest')
     return render(request, 'request/more_about_request.html', {'request': getRequest})
