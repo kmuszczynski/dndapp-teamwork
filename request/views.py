@@ -10,26 +10,42 @@ from .models import UserToRoomRequest
 
 @login_required
 def request_add_user_to_room(request):
+    error=None
     if request.method=='POST':
         form = CreateRequestAddToRoomForm(request.POST)
         if form.is_valid():
-            newRequest = form.save(commit=False)
-            newRequest.save()
-            return redirect('home')
+            room_check=form.cleaned_data.get("room")
+            character=CharacterBelongsToRoom.objects.filter(room=form.cleaned_data.get("room")).filter(character=form.cleaned_data.get("character"))
+            if len(character)==0:
+                if room_check.gamemaster!=request.user:
+                    newRequest = form.save(commit=False)
+                    newRequest.save()
+                    return redirect('home')
+                else:
+                    error="You are GM in this room!!!"
+            else:
+                error="Character already belongs to this room!!!"
     else:
         form = CreateRequestAddToRoomForm()
-        form.fields['character'].queryset=Character.objects.filter(user=request.user)
-    
-    return render(request, 'request/add_user_to_room_request.html', {'form': form})
+
+    form.fields['character'].queryset=Character.objects.filter(user=request.user)
+    return render(request, 'request/add_user_to_room_request.html', {'form': form, 'error': error})
 
 @login_required
 def viewAllRequest(request):
     requests=UserToRoomRequest.objects.filter(room__gamemaster=request.user)
     if request.method == 'POST':
         getRequest = UserToRoomRequest.objects.get(pk=int(request.POST.get("request_id")))
-        print(getRequest)
         if request.POST.get("status") == "accept":
-            CharacterBelongsToRoom.objects.create(room=getRequest.room, character=getRequest.character)
+            user_characters=CharacterBelongsToRoom.objects.filter(room=getRequest.room)
+            if len(user_characters)==0:
+                CharacterBelongsToRoom.objects.create(room=getRequest.room, character=getRequest.character, status=1)
+            else:
+                user_characters=CharacterBelongsToRoom.objects.filter(room=getRequest.room).filter(character__user=getRequest.character.user)
+                if len(user_characters)==0:
+                    CharacterBelongsToRoom.objects.create(room=getRequest.room, character=getRequest.character, status=1)
+                else:
+                    CharacterBelongsToRoom.objects.create(room=getRequest.room, character=getRequest.character, status=2)
         getRequest.delete()
     return render(request, 'request/all_request.html', {'requests': requests})
 
@@ -48,6 +64,14 @@ def more_info_about_request_user_to_room(request, request_pk):
 def view_all_gameroom(request):
     gm_room=ChatRoom.objects.filter(gamemaster=request.user)
     characters_room=CharacterBelongsToRoom.objects.filter(character__user=request.user)
+    if request.method=='POST':
+        character_old=CharacterBelongsToRoom.objects.filter(room__name=request.POST.get("room")).filter(character__user=request.user).get(status=1)
+        character_old.status=2
+        character_old.save()
+        character_new=CharacterBelongsToRoom.objects.filter(room__name=request.POST.get("room")).get(character__name=request.POST.get("character"))
+        character_new.status=1
+        character_new.save()
+        return redirect('room', room_name=request.POST.get("room"))
     return render(request, 'request/all_room.html', {
         'gm_room': gm_room,
         'characters_room': characters_room,

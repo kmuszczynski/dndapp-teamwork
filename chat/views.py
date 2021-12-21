@@ -1,8 +1,8 @@
+from asyncio.windows_events import NULL
+import re
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from .models import Chat, ChatRoom
-from charsheets.models import Character
-from charsheets.forms import CharacterList, CharacterForm
+from .models import CharacterBelongsToRoom, Chat, ChatRoom
 from .forms import CreateRoomForm
 
 @login_required
@@ -20,28 +20,33 @@ def create_chat_room(request):
 
 @login_required
 def room(request, room_name):
-    character=None
-    form=None
-    room=ChatRoom.objects.filter(name=room_name).first()
     chats=[]
 
-    characterListForm = CharacterList()
-    characterListForm.fields['list'].queryset=Character.objects.filter(user=request.user)
-
-    if request.method == 'POST':
-        character=get_object_or_404(Character, pk=request.POST.get("list"))
-        form=CharacterForm(instance=character)
-
+    #sprawdzanie czy istnieje pokój
+    room=ChatRoom.objects.filter(name=room_name).first()
     if room:
         chats=Chat.objects.filter(room=room)
     else:
-        room=ChatRoom(name=room_name)
-        room.save()
+        return render(request, 'chat/error.html')
 
-    return render(request, 'chat/room.html', {
-        'room_name': room_name,
-        'chats': chats,
-        'character': character,
-        'characterListForm': characterListForm,
-        'form': form
-    })
+    #sprawdzanie czy gracz jest gm
+    if(request.user==room.gamemaster):
+        characterList=CharacterBelongsToRoom.objects.filter(room__name=room_name)
+        print(characterList)
+        return render(request, 'chat/room_gm.html', {
+            'room_name': room_name,
+            'chats': chats,
+            'characterList': characterList,
+        })
+    
+    #sprawdzanie czy gracz ma bohatera
+    characterinroom=CharacterBelongsToRoom.objects.filter(character__user=request.user, room__name=room_name)
+    
+    if characterinroom:
+        return render(request, 'chat/room_player.html', {
+            'room_name': room_name,
+            'chats': chats,
+            'character': characterinroom.get(status=1),
+        })
+    else:
+        return render(request, 'chat/error.html')

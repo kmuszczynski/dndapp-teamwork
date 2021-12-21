@@ -1,0 +1,50 @@
+<!-- chat/templates/chat/room.html -->
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Chat Room</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <p>GameMaster</p>
+    <a class="leaveutton" href="{% url 'home' %}">Leave Room</a>
+    <div id="chat-wrap">
+        <div class="container">
+            <div id="chat-log-wrapper">
+                <div id="chat-log">
+                    {% for chat in chats.all %}
+                    <div class="messageContainer">
+                        <p class="messageDate">{{chat.timestamp}}</p>
+                        <p class="messageUser">{{chat.user}}:</p>
+                        <p class="messageContent">{{chat.content}}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <input class="textInput" id="chat-message-input" type="text" size="100"><br>
+            <input class="button" id="chat-message-submit" type="button" value="Send">
+            {{ room_name|json_script:"room-name" }}
+        </div>
+    </div>
+    <script src="{% static 'room.js' %}"></script>
+
+    <p>Lista postaci w grze: </p>
+    <ul>
+        {% for character in characterList %}
+        <li>
+            <p>{{character.character}}</p>
+        </li>
+        {% endfor %}
+    </ul>
+
+</body>
+
+</html>

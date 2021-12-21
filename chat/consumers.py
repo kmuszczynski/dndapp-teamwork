@@ -4,7 +4,6 @@ from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
 from datetime import datetime
 from .models import Chat, ChatRoom
-from .utils import run_commands
 
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):

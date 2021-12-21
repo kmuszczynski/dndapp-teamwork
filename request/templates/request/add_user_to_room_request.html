@@ -4,6 +4,16 @@
 {% block main %}
 <h1>Create Request</h1>
 
+{% if error %}
+<div class="alert alert-block alert-danger">
+    <ul class=m-0>
+        <li>
+            {{error}}
+        </li>
+    </ul>
+</div>
+{% endif %}
+
 <form method="POST">
     {% csrf_token %}
     {{ form|crispy }}

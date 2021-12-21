@@ -11,5 +11,8 @@ class UserToRoomRequest(models.Model):
     room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
     message = models.TextField(null=True)
 
+    class Meta:
+        unique_together = ('character', 'room') 
+
     def __str__(self):
         return "{} ({})-> {}".format(self.character.name, self.character.user, self.room)
