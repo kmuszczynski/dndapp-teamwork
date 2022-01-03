@@ -35,5 +35,18 @@
     <script src="{% static 'room.js' %}"></script>
     
     <p>Twoja Postać: {{character.character.name}}</p>
+
+
+    <div class="container">
+        {% if character %}
+            <form method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-primary">Update Character</button>
+            </form>
+        {% endif %}
+    </div>
+
+
 </body>
 </html>
