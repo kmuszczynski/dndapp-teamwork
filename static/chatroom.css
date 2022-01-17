@@ -1,0 +1,95 @@
+:root{
+    --wrap-medium: #4A5A69;
+    --dark-background: #232C33;
+    --low-priority: #8095A9;
+    --light-high-priority: #D3D5D7;
+    
+}
+@font-face {
+    font-family: Copperplate;
+    src: url('/fonts/copperplate-gothic-bold-regular_5LwZS/Copperplate Gothic Bold Regular/Copperplate Gothic Bold Regular.ttf');
+  }
+body{
+    background-color: var(--dark-background);
+    Color: var(--light-high-priority);
+    font-family: Copperplate;
+    height:100%;
+}
+input{
+    background-color: var(--dark-background);
+    Color: var(--light-high-priority);
+}
+div{
+    border: 1px var(--low-priority) solid;
+}
+li{
+    list-style:none;
+}
+#skills-container input,#top-not-skills-container input,#armor-class-wrap input,#header-main input{
+    width:40px;
+}
+#container-header{
+    height:150px;
+}
+
+body div, #container-header div, #header-left li, #top-nav div, #top-nav, #top-nav-bottom, #bottom-nav{
+    overflow:hidden;
+}
+
+#body-left, #body-right, #header-main, #not-skills-container, #skills-container, #container-header div, #top-nav-bottom div{
+    display: inline-block;
+}
+
+#container-header div, #top-nav-top div{
+    height:100%;
+    margin:auto;
+}
+#header-left li{
+    float:left;
+    width: 50px;
+    margin:1em;
+}
+
+#header-left, #header-right{
+    width:25%;
+}
+
+#body-left, #body-right,#header-main, #not-skills-container,#saves-container-wrap div, #skills-container,#top-nav-bottom div{
+    width:49%;
+}
+#top-not-skills-container, #top-nav-bottom, #bottom-nav div{
+    width:100%;
+}
+#top-nav div, #saves-container div, #armor-class-container div, #bottom-nav div{
+    display:block;
+    overflow:hidden;
+}
+
+#skills-container table, #top-not-skills-container table{
+    width:80%;
+    margin: 30px auto;
+}
+#top-nav-bottom, #bottom-nav div{
+    margin:20px auto;
+}
+#container-header div,#header-main li, #container-body div, #header-right p, #header-right li, #top-nav div{
+    float:left;
+}
+
+#chat-message-input, #chat-log-wrapper{
+    border: 1px solid var(--heavy-accent);
+    border-radius: 5px;
+    padding:5px;
+    margin: 2px;
+    width: 50%;
+}
+#chat-log-wrapper{
+    display:flex;
+    flex-direction: column-reverse;
+    overflow:auto;
+    height: 10em;
+    width:80%;
+    margin:10px;
+}
+
+

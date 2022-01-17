@@ -7,46 +7,154 @@
     <meta charset="utf-8"/>
     <title>Chat Room</title>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'colors.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'chatroom.css' %}">
+    <script src="{% static 'room.js' %}"></script>
 </head>
 <body>
+<div id="wrap>">
     <p>Player</p>
     <a class="leaveutton" href="{% url 'home' %}">Leave Room</a>
-    <div id="chat-wrap">
-        <div class="container">
-            <div id="chat-log-wrapper">
-                <div id="chat-log">
-                    {% for chat in chats.all %}
-                        <div class="messageContainer">
-                            <p class="messageDate">{{chat.timestamp}}</p>
-                            <p class="messageUser">{{chat.user}}:</p>
-                            <p class="messageContent">{{chat.content}}</p>
+{% if character %}
+<form method="POST">
+{% csrf_token %}
+    <div id="container-header">
+        <div id="header-left">
+        {{character.character.name}}
+            <ul> 
+                <li>{{form.name}}</li>
+                <li>{{form.race}}</li>
+                <li>{{form.combat_class}}</li>
+                <li>{{form.background}}</li>
+                <li>{{form.alignment}}</li>
+                <li>{{form.exp}}</li>
+            </ul>
+        </div>
+        <div id="header-main">
+            <ul>
+                <li>{{form.main_strength}}</li>
+                <li>{{form.main_dexterity}}</li>
+                <li>{{form.main_constitution}}</li>
+                <li>{{form.main_intelligence}}</li>
+                <li>{{form.main_wisdom}}</li>
+                <li>{{form.main_charisma}}</li>
+            </ul>
+        </div>
+        <div id="header-right">
+            <p>{{form.inspiration}}</p>
+            <p>{{form.proficiencybonus}}</p>
+        </div>
+    </div>
+{% endif %}
+    <div id="container-body">
+        <div id="body-left">
+            <div id="chat-wrap">
+                    <div id="chat-log-wrapper">
+                        <div id="chat-log">
+                            {% for chat in chats.all %}
+                                <div class="messageContainer">
+                                    <p class="messageDate">{{chat.timestamp}}</p>
+                                    <p class="messageUser">{{chat.user}}:</p>
+                                    <p class="messageContent">{{chat.content}}</p>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
-                </div>
+                    </div>
+                
+                    <input class="textInput" id="chat-message-input" type="text" size="100"><br>
+                    <input class="button" id="chat-message-submit" type="button" value="Send">
+                    {{ room_name|json_script:"room-name" }}
             </div>
         </div>
         
-        <div class="container">
-            <input class="textInput" id="chat-message-input" type="text" size="100"><br>
-            <input class="button" id="chat-message-submit" type="button" value="Send">
-            {{ room_name|json_script:"room-name" }}
-        </div>  
-    </div>
-    <script src="{% static 'room.js' %}"></script>
-    
-    <p>Twoja Postać: {{character.character.name}}</p>
-
-
-    <div class="container">
+        <div id="body-right">
         {% if character %}
-            <form method="POST">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <button type="submit" class="btn btn-primary">Update Character</button>
-            </form>
+        <div id="top-nav">
+            <div id="top-nav-top">
+                <div id="not-skills-container">
+                    <div id="top-not-skills-container">
+                        <p> Saving throws</p>
+                        <table>
+                            <tr><td>{{form.saving_strength}}</td><td>saving_strength</td></tr>
+                            <tr><td>{{form.saving_dexterity}}</td><td>saving_dexterity</td></tr>
+                            <tr><td>{{form.saving_constitution}}</td><td>saving_constitution</td></tr>
+                            <tr><td>{{form.saving_intelligence}}</td><td>saving_intelligence</td></tr>
+                            <tr><td>{{form.saving_wisdom}}</td><td>saving_wisdom</td></tr>
+                            <tr><td>{{form.saving_charisma}}</td><td>saving_charisma</td></tr>
+                        </table>
+                    </div>
+                    <div id="saves-container-wrap">
+                        <div id="armor-class-container">
+                            <div class="armor-class-wrap">
+                                <p>Armor class</p> {{form.armorclass}}
+                            </div>
+                            <div class="armor-class-wrap">
+                                <p>Initiative</p> {{form.initiative}}
+                            </div>
+                            <div class="armor-class-wrap">
+                                <p>Speed</p> {{form.speed}}
+                            </div>
+                        </div>
+                        <div id="saves-container">
+                            <div class="saves-wrap">
+                                <p>Current hit points</p> {{form.current_hp}}
+                            </div>
+                            <div class="saves-wrap">
+                                <p>Temporary hit points</p> {{form.temporary_hp}}
+                            </div>
+                            <div class="saves-wrap">
+                                <p>Hit dice</p> {{form.hit_dice}}
+                            </div>
+                            <div class="saves-wrap">
+                                <p>Death saves</p> {{form.deathsaves_success}}{{form.deathsaves_failure}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="skills-container">
+                    <table>
+                        <tr><td>{{form.acrobatics}}</td><td>acrobatics</td></tr>
+                        <tr><td>{{form.animalhandling}}</td><td>animalhandling</td></tr>
+                        <tr><td>{{form.arcana}}</td><td>arcana</td></tr>
+                        <tr><td>{{form.athletics}}</td><td>athletics</td></tr>
+                        <tr><td>{{form.deception}}</td><td>deception</td></tr>
+                        <tr><td>{{form.history}}</td><td>history</td></tr>
+                        <tr><td>{{form.insight}}</td><td>insight</td></tr>
+                        <tr><td>{{form.intimidation}}</td><td>intimidation</td></tr>
+                        <tr><td>{{form.investigation}}</td><td>investigation</td></tr>
+                        <tr><td>{{form.medicine}}</td><td>medicine</td></tr>
+                        <tr><td>{{form.nature}}</td><td>nature</td></tr>
+                        <tr><td>{{form.perception}}</td><td>perception</td></tr>
+                        <tr><td>{{form.performance}}</td><td>performance</td></tr>
+                        <tr><td>{{form.religion}}</td><td>religion</td></tr>
+                        <tr><td>{{form.sleightofhand}}</td><td>sleightofhand</td></tr>
+                        <tr><td>{{form.stealth}}</td><td>stealth</td></tr>
+                        <tr><td>{{form.survival}}</td><td>survival</td></tr>
+                    </table>
+                </div>
+            </div>
+            <div id="top-nav-bottom">
+                <div id="passive-wisdom-wrap">
+                    <p> Passive wisdom</p> {{form.passive_wisdom}}
+                </div>
+                <div id="submit-wrap">
+                    <button type="submit" class="btn btn-primary">Update Character</button>
+                </div>
+            </div>   
+        </div>
+        <div id="bottom-nav">
+            <div id="description-wrap">
+                <p>Equipment</p>
+                {{form.equipment}}
+            </div>
+            <div id="description-wrap">
+                <p>Proficiencies</p>
+                {{form.proficiencies}}
+            </div>
+        </div>
         {% endif %}
     </div>
-
-
+</div>
+</div>
 </body>
 </html>

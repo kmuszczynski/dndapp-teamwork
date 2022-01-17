@@ -3,6 +3,9 @@
     --fill: #BBD8E9;
     --bold-content: #66899E;
 }
+
+/* chat box */
+
 .messageContainer p {
     display: inline;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -16,19 +19,6 @@
     text-decoration: bold;
 }
 
-#chat-message-input, #chat-log-wrapper{
-    border: 1px solid var(--heavy-accent);
-    border-radius: 5px;
-    padding:5px;
-    margin: 2px;
-    width: 50%;
-}
-#chat-log-wrapper{
-    display:flex;
-    flex-direction: column-reverse;
-    overflow:auto;
-    height: 10em;
-}
 #chat-message-submit{
     background-color: var(--heavy-accent);
     Color: var(--fill);

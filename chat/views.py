@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import re
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
@@ -58,6 +57,7 @@ def room(request, room_name):
             'chats': chats,
             'character': characterinroom.get(status=1),
             'form': form,
+            'hl': form.fields['name']
         })
     else:
         return render(request, 'chat/error.html')

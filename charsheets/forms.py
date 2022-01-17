@@ -13,7 +13,8 @@ from django.contrib.auth.forms import UserCreationForm
 class CharacterForm(ModelForm):
     class Meta:
         model = Character
-        fields = ['name', 'race', 'level', 'combat_class']
+        fields = '__all__'
+        exclude = ['user']
 
 class CharacterList(forms.Form):
     list = forms.ModelChoiceField(
