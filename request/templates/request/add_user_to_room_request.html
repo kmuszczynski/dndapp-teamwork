@@ -16,6 +16,7 @@
 
 <form method="POST">
     {% csrf_token %}
+    <label>Room name: {{room}}</label>
     {{ form|crispy }}
     <button type="submit" class="btn btn-primary">Create</button>
 </form>

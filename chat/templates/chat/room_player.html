@@ -9,7 +9,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'colors.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'chatroom.css' %}">
-    <script src="{% static 'room.js' %}"></script>
 </head>
 <body>
 <div id="wrap>">
@@ -64,6 +63,7 @@
                     <input class="textInput" id="chat-message-input" type="text" size="100"><br>
                     <input class="button" id="chat-message-submit" type="button" value="Send">
                     {{ room_name|json_script:"room-name" }}
+                    <script src="{% static 'room.js' %}"></script>
             </div>
         </div>
         

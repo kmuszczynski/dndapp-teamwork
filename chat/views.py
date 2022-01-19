@@ -12,6 +12,10 @@ def create_chat_room(request):
         if form.is_valid():
             newRoom = form.save(commit=False)
             newRoom.gamemaster = request.user
+            if form.cleaned_data['status']=="PUBLIC":
+                newRoom.status=1
+            else: 
+                newRoom.status=2
             newRoom.save()
             return redirect("home")
     else:

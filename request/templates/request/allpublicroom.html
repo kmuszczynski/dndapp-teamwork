@@ -1,0 +1,49 @@
+{% extends 'home/base.html' %}
+
+{% block main %}
+<a class="leaveutton" href="{% url 'home' %}">Home page</a>
+
+{% if error %}
+<div class="alert alert-block alert-danger">
+    <ul class=m-0>
+        <li>{{error}}</li>
+    </ul>
+</div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <label for="search">Search Room: </label>
+    <input type="text" id="search" name="search">
+</form>
+
+<ul>
+    {% for room in rooms %}
+    <li>
+        {{ room }} | {{room.gamemaster}}<br>
+        {{ room.description }}
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" id="room" name="room" value="{{room}}">
+            <button type="submit">Send Request</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<div style="display: flex">
+    {% if first %}
+    {% else %}
+        <a href="{% url 'allPublicRooms' id_page|add:-1 %}">&lt</a>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="number" id="id_new_side" name="id_new_side" min="0" max="{{max_side_id}}" size="2" value="{{id_page}}">
+    </form>
+
+    {% if next %}
+        <a href="{% url 'allPublicRooms' id_page|add:1 %}">&gt</a>
+    {% endif %}
+</div>
+{% endblock main %}

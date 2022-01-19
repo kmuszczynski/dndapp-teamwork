@@ -32,9 +32,9 @@
             <input class="textInput" id="chat-message-input" type="text" size="100"><br>
             <input class="button" id="chat-message-submit" type="button" value="Send">
             {{ room_name|json_script:"room-name" }}
+            <script src="{% static 'room.js' %}"></script>
         </div>
     </div>
-    <script src="{% static 'room.js' %}"></script>
 
     <p>Lista postaci w grze: </p>
     <ul>

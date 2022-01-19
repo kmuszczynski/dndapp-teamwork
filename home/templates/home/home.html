@@ -12,7 +12,7 @@
 
 {% block chat %}
 <a href="{% url 'chat' %}">Create Game</a>
-<a href="{% url 'addrequest' %}">Request Add To Room</a>
 <a href="{% url 'viewallrequest' %}">View all Requests</a>
-<a href="{% url 'allrooms' %}">View all rooms</a>
+<a href="{% url 'allrooms' %}">View rooms</a>
+<a href="/request/allPublic/0">View all public rooms</a>
 {% endblock chat %}

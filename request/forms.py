@@ -7,4 +7,4 @@ from .models import UserToRoomRequest
 class CreateRequestAddToRoomForm(ModelForm):
     class Meta:
         model = UserToRoomRequest
-        fields = ['room', 'character', 'message']
+        fields = ['character', 'message']

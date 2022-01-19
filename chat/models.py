@@ -17,6 +17,9 @@ class Chat(models.Model):
 class ChatRoom(models.Model):
     name = models.CharField(max_length=255, unique=True)
     gamemaster = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    #1-public, 2-private
+    status = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(2)])
+    description = TextField(null=True)
 
     def __str__(self):
         return "{}".format(self.name)
