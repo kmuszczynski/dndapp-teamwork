@@ -3,16 +3,16 @@
 {% block header %}
 {% if user.is_authenticated %}
     <a href="{% url 'profile' %}">Profile</a>
-    <a href="{% url 'logout' %}">Logout</a>
+    <a class="btn-basic" href="{% url 'logout' %}">Logout</a>
 {% else %}
-    <a href="{% url 'login' %}">Login</a>
-    <a href="{% url 'singup' %}">Sing Up</a>
+    <a class="btn-basic" href="{% url 'login' %}">Login</a>
+    <a class="btn-basic" href="{% url 'singup' %}">Sing Up</a>
 {% endif %}
 {% endblock header %}
 
 {% block chat %}
-<a href="{% url 'chat' %}">Create Game</a>
-<a href="{% url 'viewallrequest' %}">View all Requests</a>
-<a href="{% url 'allrooms' %}">View rooms</a>
-<a href="/request/allPublic/0">View all public rooms</a>
+<a class="btn-basic" href="{% url 'chat' %}">Create Game</a>
+<a class="btn-basic" href="{% url 'viewallrequest' %}">View all Requests</a>
+<a class="btn-basic" href="{% url 'allrooms' %}">View rooms</a>
+<a class="btn-basic" href="/request/allPublic/0">View all public rooms</a>
 {% endblock chat %}

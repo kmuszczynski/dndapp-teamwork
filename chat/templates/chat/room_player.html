@@ -12,36 +12,43 @@
 </head>
 <body>
 <div id="wrap>">
-    <p>Player</p>
-    <a class="leaveutton" href="{% url 'home' %}">Leave Room</a>
+    <a class="leavebutton" href="{% url 'home' %}">Leave Room</a>
 {% if character %}
 <form method="POST">
 {% csrf_token %}
     <div id="container-header">
         <div id="header-left">
-        {{character.character.name}}
-            <ul> 
-                <li>{{form.name}}</li>
-                <li>{{form.race}}</li>
-                <li>{{form.combat_class}}</li>
-                <li>{{form.background}}</li>
-                <li>{{form.alignment}}</li>
-                <li>{{form.exp}}</li>
-            </ul>
+        <p id="char-name">{{character.character.name}}</p>
+            <table> 
+                <tr><td>{{form.race}}</td>
+                <td>{{form.level}}</td>
+                <td>{{form.combat_class}}</td>
+                <tr><td>{{form.background}}</td>
+                <td>{{form.alignment}}</td>
+                <td>{{form.exp}}</td></tr>
+                </table>
         </div>
         <div id="header-main">
-            <ul>
-                <li>{{form.main_strength}}</li>
-                <li>{{form.main_dexterity}}</li>
-                <li>{{form.main_constitution}}</li>
-                <li>{{form.main_intelligence}}</li>
-                <li>{{form.main_wisdom}}</li>
-                <li>{{form.main_charisma}}</li>
-            </ul>
+            <div id="header-center">
+                    <div class="head-attribute"><p>STRENGTH</p>{{form.main_strength}}</div>
+                    <div class="head-attribute"><p>DEXTERITY</p>{{form.main_dexterity}}</div>
+                    <div class="head-attribute"><p>CONSTITUTION</p>{{form.main_constitution}}</div>
+                    <div class="head-attribute"><p>INTELLIGENCE</p>{{form.main_intelligence}}</div>
+                    <div class="head-attribute"><p>WISDOM</p>{{form.main_wisdom}}</div>
+                    <div class="head-attribute"><p>CHARISMA</p>{{form.main_charisma}}</div>
+            </div>
         </div>
         <div id="header-right">
-            <p>{{form.inspiration}}</p>
-            <p>{{form.proficiencybonus}}</p>
+            <div class="passive-wisdom-wrap">
+                <div class="single-attribute-wrap">
+                    <p>inspiration {{form.inspiration}}</p>
+                </div>
+            </div>
+            <div class="passive-wisdom-wrap">
+                <div class="single-attribute-wrap">
+                    <p>proficiency bonus {{form.proficiencybonus}}</p>
+                </div>
+            </div>
         </div>
     </div>
 {% endif %}
@@ -60,7 +67,7 @@
                         </div>
                     </div>
                 
-                    <input class="textInput" id="chat-message-input" type="text" size="100"><br>
+                    <input class="textInput" id="chat-message-input" type="text" size="100">
                     <input class="button" id="chat-message-submit" type="button" value="Send">
                     {{ room_name|json_script:"room-name" }}
                     <script src="{% static 'room.js' %}"></script>
@@ -73,83 +80,96 @@
             <div id="top-nav-top">
                 <div id="not-skills-container">
                     <div id="top-not-skills-container">
-                        <p> Saving throws</p>
-                        <table>
-                            <tr><td>{{form.saving_strength}}</td><td>saving_strength</td></tr>
-                            <tr><td>{{form.saving_dexterity}}</td><td>saving_dexterity</td></tr>
-                            <tr><td>{{form.saving_constitution}}</td><td>saving_constitution</td></tr>
-                            <tr><td>{{form.saving_intelligence}}</td><td>saving_intelligence</td></tr>
-                            <tr><td>{{form.saving_wisdom}}</td><td>saving_wisdom</td></tr>
-                            <tr><td>{{form.saving_charisma}}</td><td>saving_charisma</td></tr>
-                        </table>
+                        <div class="skills-center">
+                            <p> Saving throws</p>
+                            <table>
+                                <tr><td>{{form.saving_strength}}</td><td>strength</td></tr>
+                                <tr><td>{{form.saving_dexterity}}</td><td>dexterity</td></tr>
+                                <tr><td>{{form.saving_constitution}}</td><td>constitution</td></tr>
+                                <tr><td>{{form.saving_intelligence}}</td><td>intelligence</td></tr>
+                                <tr><td>{{form.saving_wisdom}}</td><td>wisdom</td></tr>
+                                <tr><td>{{form.saving_charisma}}</td><td>charisma</td></tr>
+                            </table>
+                        </div>
                     </div>
                     <div id="saves-container-wrap">
                         <div id="armor-class-container">
-                            <div class="armor-class-wrap">
-                                <p>Armor class</p> {{form.armorclass}}
-                            </div>
-                            <div class="armor-class-wrap">
-                                <p>Initiative</p> {{form.initiative}}
-                            </div>
-                            <div class="armor-class-wrap">
-                                <p>Speed</p> {{form.speed}}
+                            <div class="centered-div-small">
+                                <div class="armor-class-wrap">
+                                    <p>ARMOR CLASS</p> {{form.armorclass}}
+                                </div>
+                                <div class="armor-class-wrap">
+                                    <p>INITIATIVE</p> {{form.initiative}}
+                                </div>
+                                <div class="armor-class-wrap">
+                                    <p>SPEED</p> {{form.speed}}
+                                </div>
                             </div>
                         </div>
                         <div id="saves-container">
-                            <div class="saves-wrap">
-                                <p>Current hit points</p> {{form.current_hp}}
-                            </div>
-                            <div class="saves-wrap">
-                                <p>Temporary hit points</p> {{form.temporary_hp}}
-                            </div>
-                            <div class="saves-wrap">
-                                <p>Hit dice</p> {{form.hit_dice}}
-                            </div>
-                            <div class="saves-wrap">
-                                <p>Death saves</p> {{form.deathsaves_success}}{{form.deathsaves_failure}}
+                            <div class="centered-div-small">
+                                <div class="saves-wrap-hp">
+                                    <p>current hit points</p> {{form.current_hp}}
+                                </div>
+                                <div class="saves-wrap-hp">
+                                    <p>temporary hit points</p> {{form.temporary_hp}}
+                                </div>
+                                <div class="saves-wrap">
+                                    <p>hit dice</p> {{form.hit_dice}}
+                                </div>
+                                <div class="saves-wrap">
+                                    <p>death saves</p> {{form.deathsaves_success}}{{form.deathsaves_failure}}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="skills-container">
-                    <table>
-                        <tr><td>{{form.acrobatics}}</td><td>acrobatics</td></tr>
-                        <tr><td>{{form.animalhandling}}</td><td>animalhandling</td></tr>
-                        <tr><td>{{form.arcana}}</td><td>arcana</td></tr>
-                        <tr><td>{{form.athletics}}</td><td>athletics</td></tr>
-                        <tr><td>{{form.deception}}</td><td>deception</td></tr>
-                        <tr><td>{{form.history}}</td><td>history</td></tr>
-                        <tr><td>{{form.insight}}</td><td>insight</td></tr>
-                        <tr><td>{{form.intimidation}}</td><td>intimidation</td></tr>
-                        <tr><td>{{form.investigation}}</td><td>investigation</td></tr>
-                        <tr><td>{{form.medicine}}</td><td>medicine</td></tr>
-                        <tr><td>{{form.nature}}</td><td>nature</td></tr>
-                        <tr><td>{{form.perception}}</td><td>perception</td></tr>
-                        <tr><td>{{form.performance}}</td><td>performance</td></tr>
-                        <tr><td>{{form.religion}}</td><td>religion</td></tr>
-                        <tr><td>{{form.sleightofhand}}</td><td>sleightofhand</td></tr>
-                        <tr><td>{{form.stealth}}</td><td>stealth</td></tr>
-                        <tr><td>{{form.survival}}</td><td>survival</td></tr>
-                    </table>
+                    <div class="skills-center">
+                        <table>
+                            <p> Skills </p>
+                            <tr><td>{{form.acrobatics}}</td><td>acrobatics</td></tr>
+                            <tr><td>{{form.animalhandling}}</td><td>animal handling</td></tr>
+                            <tr><td>{{form.arcana}}</td><td>arcana</td></tr>
+                            <tr><td>{{form.athletics}}</td><td>athletics</td></tr>
+                            <tr><td>{{form.deception}}</td><td>deception</td></tr>
+                            <tr><td>{{form.history}}</td><td>history</td></tr>
+                            <tr><td>{{form.insight}}</td><td>insight</td></tr>
+                            <tr><td>{{form.intimidation}}</td><td>intimidation</td></tr>
+                            <tr><td>{{form.investigation}}</td><td>investigation</td></tr>
+                            <tr><td>{{form.medicine}}</td><td>medicine</td></tr>
+                            <tr><td>{{form.nature}}</td><td>nature</td></tr>
+                            <tr><td>{{form.perception}}</td><td>perception</td></tr>
+                            <tr><td>{{form.performance}}</td><td>performance</td></tr>
+                            <tr><td>{{form.religion}}</td><td>religion</td></tr>
+                            <tr><td>{{form.sleightofhand}}</td><td>sleight of hand</td></tr>
+                            <tr><td>{{form.stealth}}</td><td>stealth</td></tr>
+                            <tr><td>{{form.survival}}</td><td>survival</td></tr>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div id="top-nav-bottom">
-                <div id="passive-wisdom-wrap">
-                    <p> Passive wisdom</p> {{form.passive_wisdom}}
+                <div class="passive-wisdom-wrap">
+                    <div class="single-attribute-wrap">
+                        <p> passive wisdom</p> {{form.passive_wisdom}}
+                    </div>
                 </div>
                 <div id="submit-wrap">
-                    <button type="submit" class="btn btn-primary">Update Character</button>
+                    <button type="submit" class="update-char">UPDATE CHARACTER</button>
                 </div>
             </div>   
         </div>
         <div id="bottom-nav">
-            <div id="description-wrap">
-                <p>Equipment</p>
-                {{form.equipment}}
-            </div>
-            <div id="description-wrap">
-                <p>Proficiencies</p>
-                {{form.proficiencies}}
+            <div class="centered-div">
+                <div class="description-wrap">
+                    <p>EQUIPMENT</p>
+                    {{form.equipment}}
+                </div>
+                <div class="description-wrap">
+                    <p>PROFICIENCIES</p>
+                    {{form.proficiencies}}
+                </div>
             </div>
         </div>
         {% endif %}

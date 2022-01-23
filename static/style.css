@@ -1,29 +1,43 @@
-:root {
-    --heavy-accent: #126597;
-    --fill: #BBD8E9;
-    --bold-content: #66899E;
+:root{
+    --wrap-medium: #4A5A69;
+    --dark-background: #232C33;
+    --low-priority: #8095A9;
+    --light-high-priority: #D3D5D7; 
+}
+@font-face {
+    font-family: CP;
+    src: url('Copperplate.ttf') format('truetype');
+  }
+a {
+    margin: auto 1em;
+    background-color: var(--light-high-priority);
+    Color: var(--dark-background);
+    border: var(--light-high-priority);
+    font-size: 15px;
+    padding: 5px 20px;
+    font-family: CP;
+    height:30px;
+    width:90px;
+}
+a:link{
+    Color: var(--dark-background);
 }
 
-/* chat box */
-
-.messageContainer p {
-    display: inline;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 12px;
-    padding:5px 1px;
+body{
+    background-color: var(--dark-background);
+    Color: var(--light-high-priority);
+    font-family: CP;
 }
-.messageDate, .messageUser{
-    Color: var(--bold-content)
+header{
+    margin:1em auto;
 }
-.messageUser{
-    text-decoration: bold;
+li a {
+    Color:var(--light-high-priority);
 }
 
-#chat-message-submit{
-    background-color: var(--heavy-accent);
-    Color: var(--fill);
-    border: 1px solid var(--heavy-accent);
-    border-radius: 5px;
-    padding:5px 8px;
-    margin: 2px;
-} 
+textarea, input, select{
+    background-color: var(--wrap-medium);
+    Color:var(--light-high-priority);
+    border: none;
+    margin:2px;
+}
