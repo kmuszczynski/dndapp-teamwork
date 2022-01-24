@@ -141,6 +141,7 @@
                             <tr><td>{{form.nature}}</td><td>nature</td></tr>
                             <tr><td>{{form.perception}}</td><td>perception</td></tr>
                             <tr><td>{{form.performance}}</td><td>performance</td></tr>
+                            <tr><td>{{form.persuation}}</td><td>persuation</td></tr>
                             <tr><td>{{form.religion}}</td><td>religion</td></tr>
                             <tr><td>{{form.sleightofhand}}</td><td>sleight of hand</td></tr>
                             <tr><td>{{form.stealth}}</td><td>stealth</td></tr>
@@ -170,6 +171,14 @@
                     <p>PROFICIENCIES</p>
                     {{form.proficiencies}}
                 </div>
+                {% if form.errors %}
+                <div class="description-wrap">
+                    <p>ERRORS</p>
+                    <textarea >
+                    {{ form.errors }}
+                    </textarea>
+                </div>
+                {%endif%}
             </div>
         </div>
         {% endif %}

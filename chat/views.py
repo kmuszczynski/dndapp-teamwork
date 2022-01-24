@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from .models import CharacterBelongsToRoom, Chat, ChatRoom
 from .forms import CreateRoomForm
-from charsheets.forms import CharacterForm
+from charsheets.forms import CharacterForm, CharacterFormChatRoom
 
 @login_required
 def create_chat_room(request):
@@ -46,9 +46,9 @@ def room(request, room_name):
     #sprawdzanie czy gracz ma bohatera
     characterinroom=CharacterBelongsToRoom.objects.filter(character__user=request.user, room__name=room_name)
 
-    form = CharacterForm(instance=characterinroom.get(status=1).character)
+    form = CharacterFormChatRoom(instance=characterinroom.get(status=1).character)
     if request.method == 'POST':
-        form = CharacterForm(request.POST,instance=characterinroom.get(status=1).character)
+        form = CharacterFormChatRoom(request.POST,instance=characterinroom.get(status=1).character)
         if form.is_valid():
             form.save()
             print("Form is valid")
@@ -60,8 +60,7 @@ def room(request, room_name):
             'room_name': room_name,
             'chats': chats,
             'character': characterinroom.get(status=1),
-            'form': form,
-            'hl': form.fields['name']
+            'form': form
         })
     else:
         return render(request, 'chat/error.html')

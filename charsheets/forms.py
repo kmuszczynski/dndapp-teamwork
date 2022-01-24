@@ -10,6 +10,12 @@ from django.contrib.auth.forms import UserCreationForm
 
 # Formularz do łatwego tworzenia postaci, bardzo basic, pewnie do wywalenia
 
+class CharacterFormChatRoom(ModelForm):
+    class Meta:
+        model = Character
+        fields = '__all__'
+        exclude = ['user','name']
+
 class CharacterForm(ModelForm):
     class Meta:
         model = Character

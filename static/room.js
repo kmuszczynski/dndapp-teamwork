@@ -31,12 +31,17 @@ chatSocket.onmessage = function(e) {
     messageContainer.appendChild(messageContent)
     if (data.message != ""){
         chatLog.appendChild(messageContainer)
+        updateScroll();
     }
 
     if (document.querySelector('#emptyText')) {
         document.querySelector('#emptyText').remove()
     }
 };
+function updateScroll(){
+    var scrolledDiv = document.getElementById("chat-log");
+    scrolledDiv.scrollTop = scrolledDiv.scrollHeight;
+}
 
 chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
@@ -74,7 +79,6 @@ function run_commands(message) {
 document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
     var message = run_commands(messageInputDom.value);
-    
     chatSocket.send(JSON.stringify({
         'message': message
     }));

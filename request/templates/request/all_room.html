@@ -1,12 +1,15 @@
 {% extends 'home/base.html' %}
 
 {% block main %}
+<div id="wrap">
 <p>
     <b>GM room:</b>
+    
     {% for room in gm_room %}
         <br><a href="{% url 'room' room.name %}">{{room}}</a>
     {% endfor %}
     <br>
+<div id="container-body">
     <b>Game room:</b><br>
     {% for character_room in characters_room %}
         {{character_room.character.name}} ({{character_room.room.name}})
@@ -18,5 +21,8 @@
         </form>
     {% endfor %}
 </p>
+</div>
 <a class="login_link" href="{% url 'home' %}">Home</a>
+
+</div>
 {% endblock main %}
