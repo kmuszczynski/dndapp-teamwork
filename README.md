@@ -1,6 +1,6 @@
 ## UG - 2021/22 - IT - Team project
 
-authors: Karwowski Mariusz, Lazarowski Cyprian, Muszczyński Kacper, Pluta Weronika
+authors: Lazarowski Cyprian, Muszczyński Kacper, Pluta Weronika, Randzio Paweł
 
 goal: to create a virtual table-top for Dungeons & Dragons: 5th Edition
 
