@@ -76,11 +76,17 @@ function run_commands(message) {
     return message;
 }
 
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
+
 document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
-    var message = run_commands(messageInputDom.value);
-    chatSocket.send(JSON.stringify({
-        'message': message
-    }));
-    messageInputDom.value = '';
+    if (!(isBlank(messageInputDom.value))) {
+        var message = run_commands(messageInputDom.value);
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+        messageInputDom.value = '';
+    }
 };
