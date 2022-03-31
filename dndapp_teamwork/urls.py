@@ -22,8 +22,11 @@ urlpatterns = [
     # chat
     path('chat/', include('chat.urls')),
 
+    # profile
+    path('profile/', include('account.urls')),
+
     # charsheets
-    path('profile/', include('charsheets.urls')),
+    path('character/', include('charsheets.urls')),
 
     # home
     path('', views.home, name='home'),

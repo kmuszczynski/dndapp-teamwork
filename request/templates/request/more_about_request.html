@@ -1,8 +1,7 @@
 {% extends 'home/base.html' %}
 
 {% block main %}
-<p>User: {{request.character.user}}<br>
-Character Name: {{request.character.name}} <br>
+<p>User: {{request.user}}<br>
 Message : {{request.message}}</p>
 <form method="POST">
     {%csrf_token%}

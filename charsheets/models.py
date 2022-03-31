@@ -1,47 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
-from django.core.exceptions import ValidationError
+from chat.models import ChatRoom
 
 # Modele, absolutnie nic ciekawego
-
-class CombatClass(models.Model):
-    name = models.CharField(max_length=50)
-    hit_die = models.IntegerField()
-
-    def __str__(self):
-        return self.name
-
-class Race(models.Model):
-    name = models.CharField(max_length=50)
-    speed = models.IntegerField()
-
-    def __str__(self):
-        return self.name
-
-class Background(models.Model):
-    name = models.CharField(max_length=50)
-    desc = models.CharField(max_length=250)
-
-    def __str__(self):
-        return self.name
-
-class Alignment(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
 
 class Character(models.Model):
     name = models.CharField(max_length=50)
     level = models.IntegerField()
-    race = models.ForeignKey(Race, on_delete=models.SET_NULL, null=True)
-    combat_class = models.ForeignKey(CombatClass, on_delete=models.SET_NULL, null=True)
-    background = models.ForeignKey(Background, on_delete=models.SET_NULL, null=True)
-    alignment = models.ForeignKey(Alignment, on_delete=models.SET_NULL, null=True)
+
+    race = models.CharField(max_length=100, null=True, blank=True)
+    combat_class = models.CharField(max_length=100, null=True, blank=True)
+    background = models.CharField(max_length=100, null=True, blank=True)
+    alignment = models.CharField(max_length=100, null=True, blank=True)
+
     exp = models.IntegerField(default=0)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
 
     main_strength = models.IntegerField(default=0)
     main_dexterity = models.IntegerField(default=0)
