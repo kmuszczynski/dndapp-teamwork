@@ -3,9 +3,10 @@ from django.shortcuts import redirect, render, get_object_or_404
 from .models import Character
 from django.contrib.auth.decorators import login_required
 
+
 # tworzenie postaci z forma opartego na modelu
 @login_required
-def createchar(request):
+def create_character(request):
     if request.method == 'POST':
         form = CharacterForm(request.POST)
         if form.is_valid():
@@ -14,10 +15,11 @@ def createchar(request):
             return redirect("home")
     else:
         form = CharacterForm()
-    return render(request, 'charsheets/createchar.html', {'form': form})
+    return render(request, 'charsheets/create_character.html', {'form': form})
+
 
 @login_required
-def viewcharacter(request, character_pk):
+def view_character(request, character_pk):
     character = get_object_or_404(Character, pk=character_pk, user=request.user) #też śmieszna sztuczka
     if request.method == 'POST':
         form = CharacterForm(request.POST, instance=character)
@@ -25,4 +27,4 @@ def viewcharacter(request, character_pk):
             form.save()
     else:
         form = CharacterForm(instance=character)
-    return render(request, 'charsheets/viewcharacter.html', {'character':character, 'form':form})
+    return render(request, 'charsheets/view_character.html', {'character':character, 'form':form})

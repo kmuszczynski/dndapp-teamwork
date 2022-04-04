@@ -4,14 +4,16 @@ from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.fields import CharField, TextField
 from django.core.validators import MaxValueValidator, MinValueValidator 
 
+
 class Chat(models.Model):
-    content=models.CharField(max_length=100)
-    timestamp=models.CharField(max_length=7)
+    content = models.CharField(max_length=100)
+    timestamp = models.CharField(max_length=7)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room=models.ForeignKey('ChatRoom', on_delete=models.CASCADE)
+    room = models.ForeignKey('ChatRoom', on_delete=models.CASCADE)
 
     def __str__(self):
         return "{} {}".format(self.timestamp, self.user)
+
 
 class ChatRoom(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -23,6 +25,7 @@ class ChatRoom(models.Model):
     def __str__(self):
         return "{}".format(self.name)
 
+
 class UserBelongsToRoom(models.Model):
     room = models.ForeignKey('ChatRoom', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -32,4 +35,3 @@ class UserBelongsToRoom(models.Model):
     
     def __str__(self):
         return f"{self.user} ({self.room.name})"
-

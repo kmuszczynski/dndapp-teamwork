@@ -5,6 +5,7 @@ from channels.db import database_sync_to_async
 from datetime import datetime
 from .models import Chat, ChatRoom
 
+
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
 		self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -27,11 +28,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		text_data_json = json.loads(text_data)
 		message = text_data_json['message']
 		date = datetime.now()
-		minutes = date.minute
-		if date.minute == "":
-			minutes = "00"
-		elif len(str(date.minute))==1:
-			minutes = "0" + str(date.minute)
+		minutes = date.minute if len(date.minute) > 1 else "0" + date.minute if len(date.minute) == 1 else "00"
 
 		room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
 

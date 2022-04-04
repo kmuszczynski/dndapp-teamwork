@@ -4,10 +4,12 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 
+
 username_validator = UnicodeUsernameValidator()
 
+
 class UserRegisterForm(UserCreationForm):
-    email=forms.EmailField(max_length=50)
+    email = forms.EmailField(max_length=50)
     username = forms.CharField(help_text='')
     password1 = forms.CharField(help_text='', widget=(forms.PasswordInput(attrs={'class': 'form-control'})))
     password2 = forms.CharField(help_text='', widget=(forms.PasswordInput(attrs={'class': 'form-control'})))

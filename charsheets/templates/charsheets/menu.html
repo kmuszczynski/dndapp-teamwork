@@ -5,9 +5,9 @@
 <h3>List of your, and only your, characters:</h3>
 <ul>
     {% for character in characters %}
-    <li><a href="{% url 'viewcharacter' character.id %}">{{ character }}</li></a>
+    <li><a href="{% url 'view_character' character.id %}">{{ character }}</li></a>
     {% endfor %}
 </ul>
-<a href="{% url 'createchar' %}">Create Character</a>
+<a href="{% url 'create_character' %}">Create Character</a>
 <a href="{% url 'profile' %}">Profile</a>
 {% endblock main %}

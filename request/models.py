@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from chat.models import ChatRoom
 
+
 # Create your models here
 class UserToRoomRequest(models.Model):
     room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)

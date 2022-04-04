@@ -5,10 +5,12 @@ from django.forms import ModelForm
 from django import forms
 from .models import ChatRoom
 
-STATUS=(
+
+STATUS = (
     ("PRIVATE", "Private"),
     ("PUBLIC", "Public"),
 )
+
 
 class CreateRoomForm(ModelForm):
     status = forms.ChoiceField(choices=STATUS, initial="PUBLIC")
