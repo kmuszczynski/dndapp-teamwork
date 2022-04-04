@@ -5,15 +5,18 @@ from .forms import CreateRoomForm
 from charsheets.models import Character
 
 
+INVALID_CHARACTERS = " !\"#$%&'()*+,./:;<=>?@[\]^`{|}~"
+
+
 @login_required
 def create_chat_room(request):
     if request.method == 'POST':
         form = CreateRoomForm(request.POST)
-        if form.is_valid():
-            newRoom = form.save(commit=False)
-            newRoom.gamemaster = request.user
-            newRoom.status = 1 if form.cleaned_data['status'] == "PUBLIC" else 2
-            newRoom.save()
+        if form.is_valid() and not any(c in INVALID_CHARACTERS for c in form['name'].value()):
+            new_room = form.save(commit=False)
+            new_room.gamemaster = request.user
+            new_room.status = 1 if form.cleaned_data['status'] == "PUBLIC" else 2
+            new_room.save()
             return redirect("home")
     else:
         form = CreateRoomForm()
