@@ -28,7 +28,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		text_data_json = json.loads(text_data)
 		message = text_data_json['message']
 		date = datetime.now()
-		minutes = date.minute if len(date.minute) > 1 else "0" + date.minute if len(date.minute) == 1 else "00"
+		minutes = date.minute
+		if date.minute == "":
+			minutes = "00"
+		elif len(str(date.minute))==1:
+			minutes = "0" + str(date.minute)
 
 		room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
 

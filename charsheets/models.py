@@ -17,6 +17,7 @@ class Character(models.Model):
     exp = models.IntegerField(default=0)
 
     room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     main_strength = models.IntegerField(default=0)
     main_dexterity = models.IntegerField(default=0)

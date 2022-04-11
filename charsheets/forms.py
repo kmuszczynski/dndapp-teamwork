@@ -21,7 +21,7 @@ class CharacterForm(ModelForm):
     class Meta:
         model = Character
         fields = '__all__'
-        exclude = ['user']
+        exclude = ['user', 'room']
 
 
 class CharacterList(forms.Form):

@@ -39,51 +39,25 @@
             </div>
 
             <div id="body-right">
-                {% if characterList %}
                 <div id="top-nav-gm">
                     <div id="charlist-wrap">
-                        <p id="char-name">Lista postaci w grze: </p><br>
+                        <p id="char-name">Lista postaci gracza: </p><br>
                         <div id="char-list">
-                            {% for character in characterList %}
-                            <div class="char-details-wrap">
-                                <p>{{character.name}}</p>
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <p class="char-att">Level:</p>
-                                        </td>
-                                        <td>{{character.level}}</td>
-                                        <td>
-                                            <p class="char-att">Race:</p>
-                                        </td>
-                                        <td>{{character.race}}</td>
-                                        <td>
-                                            <p class="char-att">Combat class:</p>
-                                        </td>
-                                        <td>{{character.combat_class}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p class="char-att">Background:</p>
-                                        </td>
-                                        <td>{{character.background}}</td>
-                                        <td>
-                                            <p class="char-att">Alignment:</p>
-                                        </td>
-                                        <td>{{character.alignment}}</td>
-                                        <td>
-                                            <p class="char-att">Exp points:</p>
-                                        </td>
-                                        <td>{{character.exp}}</td>
-                                    </tr>
-                                </table>
-                            </div>
+                            <a class="leavebutton" href="{% url 'create_character' room_name %}">Create character</a><br><br>
+                            {% for character in playerCharacters %}
+                            <a class="leavebutton" href="{% url 'view_character' character.id %}">{{character.name}}</a><br><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div id="charlist-wrap">
+                        <p id="char-name">Lista postaci innych graczy: </p><br>
+                        <div id="char-list">
+                            {% for character in otherCharactersList %}
+                            {{character.name}}<br><br>
                             {% endfor %}
                         </div>
                     </div>
                 </div>
-
-                {% endif %}
             </div>
         </div>
     </div>
