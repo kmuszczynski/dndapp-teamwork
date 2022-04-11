@@ -35,14 +35,22 @@ def room(request, room_name):
         return render(request, 'char/error.html')
 
     chats = Chat.objects.filter(room=room)
-    gm = request.user == room.gamemaster
-    playerCharacters = Character.objects.filter(room=room).filter(user=request.user)
-    otherCharactersList = Character.objects.filter(room=room).exclude(user=request.user)
 
-    return render(request, 'chat/room.html', {
-        'room_name': room_name,
-        'chats': chats,
-        'gm': gm,
-        'playerCharacters': playerCharacters,
-        'otherCharactersList': otherCharactersList,
-    })
+    characters=Character.objects.filter(room=room)
+
+    if request.user!=room.gamemaster:
+        playerCharacters = characters.filter(user=request.user)
+        otherCharactersList = characters.exclude(user=request.user)
+
+        return render(request, 'chat/room.html', {
+            'room_name': room_name,
+            'chats': chats,
+            'playerCharacters': playerCharacters,
+            'otherCharactersList': otherCharactersList,
+        })
+    else:
+        return render(request, 'chat/room.html', {
+            'room_name': room_name,
+            'chats': chats,
+            'playerCharacters': characters,
+        })

@@ -28,12 +28,16 @@ def create_character(request, room_name):
 
 @login_required
 def view_character(request, character_pk):
-    character = get_object_or_404(Character, pk=character_pk, user=request.user)
-    if request.method == 'POST':
-        form = CharacterForm(request.POST, instance=character)
-        if form.is_valid():
-            form.save()
-            return redirect("room", room_name=character.room)
-    else:
-        form = CharacterForm(instance=character)
-    return render(request, 'charsheets/viewcharacter.html', {'character':character, 'form':form})
+    character = get_object_or_404(Character, pk=character_pk)
+
+    if character.user==request.user:
+        if request.method == 'POST':
+            form = CharacterForm(request.POST, instance=character)
+            if form.is_valid():
+                form.save()
+                return redirect("room", room_name=character.room)
+        else:
+            form = CharacterForm(instance=character)
+        return render(request, 'charsheets/viewcharacter.html', {'character':character, 'form':form})
+    elif character.room.gamemaster == request.user:
+        return render(request, 'charsheets/viewcharactergm.html', {'character':character})
