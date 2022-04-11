@@ -1,8 +1,11 @@
-from charsheets.forms import CharacterForm
+import json
+from django.forms.models import model_to_dict
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Character
-from chat.models import ChatRoom
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from .models import Character
+from charsheets.forms import CharacterForm
+from chat.models import ChatRoom
 
 
 # tworzenie postaci z forma opartego na modelu
@@ -41,3 +44,14 @@ def view_character(request, character_pk):
         return render(request, 'charsheets/viewcharacter.html', {'character':character, 'form':form})
     elif character.room.gamemaster == request.user:
         return render(request, 'charsheets/viewcharactergm.html', {'character':character})
+
+
+@login_required
+def download_character_as_json(request, character_pk):
+    character = model_to_dict(get_object_or_404(Character, pk=character_pk, user=request.user))
+    character.pop("user")
+    character.pop("room")
+    json_character = json.dumps(character)
+    response = HttpResponse(json_character, content_type='application/json')
+    response['Content-Disposition'] = f'attachment; filename={character["name"]}.json'
+    return response
