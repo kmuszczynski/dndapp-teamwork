@@ -27,12 +27,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)
 		message = text_data_json['message']
-		date = datetime.now()
-		minutes = date.minute
-		if date.minute == "":
-			minutes = "00"
-		elif len(str(date.minute))==1:
-			minutes = "0" + str(date.minute)
+		date = datetime.now().ctime().split(' ')[3][:5]
 
 		room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
 
@@ -41,7 +36,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     #content=run_commands(message),
                     user=self.scope['user'],
                     room=room,
-               		timestamp="[%s:%s]" % (date.hour, minutes)
+               		timestamp="[%s]" % date
                 )
 
 		await database_sync_to_async(chat.save)()
@@ -52,7 +47,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 				'type': 'chat_message',
 				'message': message,
 				'user': str(self.scope["user"]),
-				'date': "%s:%s" % (date.hour, minutes),
+				'date': "%s" % date,
 			})
 
 	async def chat_message(self, event):
