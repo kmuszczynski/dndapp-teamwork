@@ -1,67 +1,81 @@
 <!-- chat/templates/chat/room.html -->
 {% load static %}
-{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8" />
     <title>Chat Room</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'chatroom.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'room.css' %}">
 </head>
-
 <body>
-    <div id="wrap>">
-        <div id="container-header-gm">
-            <a class="leavebutton" href="{% url 'home' %}">Leave Room</a>
+    <div id="left">
+        <div id="nav">
+            <div id="leave">
+                <a id="leavebutton" href="{% url 'home' %}">Leave Room</a>
+            </div>
+            <div id="title">
+                {{room_name}}
+            </div>
         </div>
-        <div id="container-body">
-            <div id="body-left">
-                <div id="chat-wrap">
-                    <div id="chat-log-wrapper">
-                        <div id="chat-log">
-                            {% for chat in chats.all %}
-                            <div class="messageContainer">
-                                <p class="messageDate">{{chat.timestamp}}</p>
-                                <p class="messageUser">{{chat.user}}:</p>
-                                <p class="messageContent">{{chat.content}}</p>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                    <input class="textInput" id="chat-message-input" type="text" size="100">
-                    <input class="button" id="chat-message-submit" type="button" value="Send">
-                    {{ room_name|json_script:"room-name" }}
-                    <script src="{% static 'room.js' %}"></script>
+        <div id="board">
+            {% for row in y %}
+                <div id="row">
+                    {% for element in x %}
+                        <div id="element"></div>
+                    {% endfor %}
                 </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="right">
+        <div id="nav">
+            <div id="button_right_nav">
+                <button id="chat_button" onclick="create_chat()">Chat</button>
+            </div>
+            <div id="button_right_nav">
+                <button id="char_list_button" onclick="get_character_list()">Character List</button>
+            </div>
+            <div id="button_right_nav2">
+                <button id="player_panel_button" onclick="player_panel()">Player</button>
+            </div>
+        </div>
+        <div id="right_content">
+            <div id="chat">
+                <div id="chat-log">
+                    {% for chat in chats.all %}
+                    <div class="messageContainer">
+                        <p class="messageDate">{{chat.timestamp}}</p>
+                        <p class="messageUser">{{chat.user}}:</p>
+                        <p class="messageContent">{{chat.content}}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <input class="textInput" id="chat-message-input" type="text" size="50">
+                <input class="button" id="chat-message-submit" type="button" value="Send">
+                {{ room_name|json_script:"room-name" }}
+                <script src="{% static 'room.js' %}"></script>
+                <script src="{% static 'sidebar.js' %}"></script>
             </div>
 
-            <div id="body-right">
-                <div id="top-nav-gm">
-                    <div id="charlist-wrap">
-                        <p id="char-name">Lista postaci gracza: </p><br>
-                        <div id="char-list">
-                            <a class="leavebutton" href="{% url 'create_character' room_name %}">Create character</a><br><br>
-                            {% for character in playerCharacters %}
-                            <a class="leavebutton" href="{% url 'view_character' character.id %}">{{character.name}}</a><br><br>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div id="charlist-wrap">
-                        <p id="char-name">Lista postaci innych graczy: </p><br>
-                        <div id="char-list">
-                            {% for character in otherCharactersList %}
-                            {{character.name}}<br><br>
-                            {% endfor %}
-                        </div>
-                    </div>
+            <div id="char_list">
+                <div>Lista postaci gracza:</div>
+                {% for character in playerCharacters %}
+                    <a href="{% url 'view_character' character.id %}">{{character.name}}</a><br>
+                {% endfor %}<br>
+                <div>Lista postaci innych graczy:</div>
+                <div id="char-list">
+                    {% for character in otherCharactersList %}
+                        {{character.name}}<br>
+                    {% endfor %}
                 </div>
+            </div>
+            
+            <div id="player_panel">
+                <a href="{% url 'create_character' room_name %}">Create character</a><br><br>
             </div>
         </div>
     </div>
-
 </body>
-
 </html>

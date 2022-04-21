@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE, PROTECT
-from django.db.models.fields import CharField, TextField
+from django.db.models.fields import TextField
 from django.core.validators import MaxValueValidator, MinValueValidator 
 
 
@@ -21,6 +21,8 @@ class ChatRoom(models.Model):
     #1-public, 2-private
     status = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(2)])
     description = TextField(null=True, blank=True)
+    grid_x = models.PositiveIntegerField()
+    grid_y = models.PositiveIntegerField()
 
     def __str__(self):
         return "{}".format(self.name)
