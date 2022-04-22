@@ -87,7 +87,8 @@ body{
 }
 
 #char_list,
-#player_panel{
+#player_panel,
+#active_element{
     display:none;
 }
 

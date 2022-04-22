@@ -12,7 +12,9 @@ const chatSocket = new WebSocket(
 function active(element_id) {
     var divs = document.querySelectorAll(".element");
     divs.forEach((div) => {
-        div.style.backgroundColor = "white";
+        if (div.style.backgroundColor == "green") {
+            div.style.backgroundColor = "white";   
+        }
     })
     
     var element;
@@ -22,6 +24,8 @@ function active(element_id) {
     else element = element_id;   
 
     element.style.backgroundColor = "green";
+
+    active_element(element);
 }
 
 chatSocket.onmessage = function(e) {
@@ -35,9 +39,8 @@ chatSocket.onmessage = function(e) {
             var row = document.createElement('div'); row.className = "row"; row.id = i+1;
             for (var j = 0; j < x; j++){
                 var element = document.createElement('div'); element.className = "element";
-                var str = 'x' + (j + 1) + 'y' + (i + 1);
-                element.id = str;
-                element.setAttribute("onclick", 'active(' + str + ')');
+                element.id = 'x' + (j + 1) + 'y' + (i + 1);
+                element.setAttribute("onclick", 'active(' + element.id + ')');
                 row.appendChild(element);
             }
             board.appendChild(row);
@@ -81,13 +84,6 @@ chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
 };
 
-document.querySelector('#chat-message-input').focus();
-document.querySelector('#chat-message-input').onkeyup = function(e) {
-    if (e.keyCode === 13) {  // enter, return
-        document.querySelector('#chat-message-submit').click();
-    }
-};
-
 function roll(message) {
     var command = message.split(' ');
     if (message.charAt(0)=='/' && command[1].includes('d')) {
@@ -129,6 +125,13 @@ function isBlank(str) {
     return (!str || /^\s*$/.test(str));
 }
 
+document.querySelector('#chat-message-input').focus();
+document.querySelector('#chat-message-input').onkeyup = function(e) {
+    if (e.keyCode === 13) {  // enter, return
+        document.querySelector('#chat-message-submit').click();
+    }
+};
+
 document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
     if (!(isBlank(messageInputDom.value))) {
@@ -140,3 +143,17 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
         messageInputDom.value = '';
     }
 };
+
+document.querySelector('#token_name_input').focus();
+document.querySelector('#token_name_input').onkeyup = function(e) {
+    if (e.keyCode === 13) {  // enter, return
+        document.querySelector('#token_name_button').click();
+    }
+};
+
+document.querySelector('#token_name_button').onclick = function (e) {
+    var input = document.querySelector('#token_name_input');
+    var element = document.getElementById(input.className);
+
+    element.innerHTML = input.value;
+}

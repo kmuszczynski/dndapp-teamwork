@@ -54,9 +54,6 @@
 
                 <input class="textInput" id="chat-message-input" type="text" size="50">
                 <input class="button" id="chat-message-submit" type="button" value="Send">
-                {{ room_name|json_script:"room-name" }}
-                <script src="{% static 'room.js' %}"></script>
-                <script src="{% static 'sidebar.js' %}"></script>
             </div>
 
             <div id="char_list">
@@ -75,7 +72,17 @@
             <div id="player_panel">
                 <a href="{% url 'create_character' room_name %}">Create character</a><br><br>
             </div>
+
+            <div id="active_element">
+                <h3>Edit Active Token</h3>
+                <label>Set Token Name: </label><br>
+                <input type="text" id="token_name_input"></intput>
+                <button type="submit" id="token_name_button">Set name</button>
+            </div>
         </div>
     </div>
+    {{ room_name|json_script:"room-name" }}
+    <script src="{% static 'room.js' %}"></script>
+    <script src="{% static 'sidebar.js' %}"></script>
 </body>
 </html>
