@@ -20,9 +20,9 @@
         </div>
         <div id="board">
             {% for row in y %}
-                <div id="row">
+                <div class="row" id="{{forloop.counter}}r">
                     {% for element in x %}
-                        <div id="element"></div>
+                        <div class="element" id="x{{forloop.counter}}y{{forloop.parentloop.counter}}" onclick="active('x{{forloop.counter}}y{{forloop.parentloop.counter}}')"></div>
                     {% endfor %}
                 </div>
             {% endfor %}

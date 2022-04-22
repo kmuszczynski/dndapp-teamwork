@@ -9,6 +9,21 @@ const chatSocket = new WebSocket(
     + '/'
 );
 
+function active(element_id) {
+    var divs = document.querySelectorAll(".element");
+    divs.forEach((div) => {
+        div.style.backgroundColor = "white";
+    })
+    
+    var element;
+    if (typeof element_id == 'string') {
+        element = document.getElementById(element_id);
+    }
+    else element = element_id;   
+
+    element.style.backgroundColor = "green";
+}
+
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     if (data.type == "grid") {
@@ -17,9 +32,12 @@ chatSocket.onmessage = function(e) {
         var board = document.getElementById('board');
         board.innerHTML = "";
         for (var i = 0; i < y; i++) {
-            var row = document.createElement('div'); row.id = "row";
+            var row = document.createElement('div'); row.className = "row"; row.id = i+1;
             for (var j = 0; j < x; j++){
-                var element = document.createElement('div'); element.id = "element";
+                var element = document.createElement('div'); element.className = "element";
+                var str = 'x' + (j + 1) + 'y' + (i + 1);
+                element.id = str;
+                element.setAttribute("onclick", 'active(' + str + ')');
                 row.appendChild(element);
             }
             board.appendChild(row);

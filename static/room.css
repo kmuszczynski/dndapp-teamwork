@@ -50,7 +50,9 @@ body{
 }
 
 #board{
-    height: 94%;
+    height: 800px;
+    overflow-x: scroll;
+    overflow-y: scroll;
 }
 
 #button_right_nav{
@@ -102,12 +104,12 @@ body{
     padding: 5px 1px;
 }
 
-#row{
+.row{
     height: 50px;
     display:flex;
 }
 
-#element{
+.element{
     height: 50px;
     width: 50px;
     border-style: groove;
