@@ -1,22 +1,48 @@
-{% extends 'home/base.html' %}
+{% extends 'home/menu.html' %}
 
 {% block main %}
-<div id="wrap">
-<p>
-    <b>GM room:</b>
-    
-    {% for room in gm_rooms %}
-        <br><a href="{% url 'room' room.name %}">{{room}}</a>
-    {% endfor %}
+{% if gm_rooms %}
+<div class="menu-section">
+    <h2>Your rooms</h2>
+    <table>
+        {% for room in gm_rooms %}
+        <tr>
+            <th style="width:70%; max-width: 70%;">
+                <label class="item-name">{{room}}</label><br>
+                <label class="item-desc">{{room.description}}</label> 
+            </th>
+            <th style="width:30%">
+                <a class="btn-basic btn-small" href="{% url 'room' room.name %}">GO</a>
+            </th>
+        </tr>
+        {% endfor %}
+    </table>
     <br>
-<div id="container-body">
-    <b>Game room:</b><br>
-    {% for room in player_rooms %}
-        <br><a href="{% url 'room' room.room.name %}">{{room}}</a>
-    {% endfor %}
-</p>
 </div>
-<a class="login_link" href="{% url 'home' %}">Home</a>
+{% endif %}
+{% if player_rooms %}
+<div lass="menu-section">
+    <h2>Rooms you're plaing in</h2>
+    <table>
+        {% for room in player_rooms %}
+        <tr>
+            <th style="width:70%">
+                <label class="item-name">{{room}}</label><br>
+                <label class="item-desc">{{room.description}}</label> 
+            </th>
+            <th style="width:30%">
+                <a class="btn-basic btn-small" href="{% url 'room' room.room.name %}">GO</a>
+            </th>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+{% if not player_rooms and not gm_rooms%}
+<h2> You're not in any rooms! </h2>
+{% endif %}
+<div id="menu-bottom-glue">
+    <a class="btn-basic" href="{% url 'home' %}">Home</a>
+</div>
 
-</div>
 {% endblock main %}

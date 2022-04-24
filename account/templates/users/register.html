@@ -1,15 +1,19 @@
-{% extends 'home/base.html' %}
+{% extends 'home/menu.html' %}
 {% load crispy_forms_tags %}
 
 {% block main %}
 <div>
-    <h3>Sing up</h3>
-    <form method="POST">
-        {% csrf_token %}
-        {{form|crispy}}
-        <button type="submit" class="btn btn-primary">Sing up</button>
-        <a href="{% url 'login' %}">Sing In</a>
-        <a href="{% url 'home' %}">Back</a>
-    </form>
+    <h2>Sing up</h2>
+    <div class="crispy-input">
+        <form method="POST">
+            {% csrf_token %}
+            {{form|crispy}}
+            <button type="submit" class="btn-basic btn-active">Sing up</button>
+        </form>
+    </div>
+        <a class="btn-basic" href="{% url 'login' %}">Sing In</a>
+        <a class="btn-basic" href="{% url 'home' %}">Back</a>
+
+
 </div>
 {% endblock main %}

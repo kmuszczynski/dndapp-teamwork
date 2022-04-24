@@ -1,19 +1,22 @@
-{% extends 'home/base.html' %}
+{% extends 'home/menu.html' %}
 
 {% block main %}
-<h3>All Request</h3>
-<ul>
+<h2>Requests to your rooms</h2>
+<div class="crispy-input">
+<table id="request-table">
     {% for request in requests %}
-        <li>{{request}}
-            <a href="{% url 'moreinfo' request.id %}">more</a>
+        <tr>
+            <th class="item-desc" style="width:60%;"><a href="{% url 'moreinfo' request.id %}">{{request}}</a></th>
             <form method="POST">
                 {%csrf_token%}
                 <input type="hidden" name="request_id" value={{request.id}}>
-                <input type="submit" value="accept" name="status">
-                <input type="submit" value="reject" name="status">
+                <th style="width:20%;"><input class="accept"  type="submit" value="accept" name="status"></th>
+                <th style="width:20%;"><input class="reject" type="submit" value="reject" name="status"></th>
             </form>
-        </li>
+          
+        </tr>
     {% endfor %}
-</ul>
-<a class="login_link" href="{% url 'home' %}">Home</a>
+    </table>
+</div>
+<a class="btn-basic btn-bigger" href="{% url 'home' %}">Home</a>
 {% endblock main %}

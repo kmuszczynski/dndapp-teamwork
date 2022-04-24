@@ -1,13 +1,23 @@
 {% extends 'home/base.html' %}
 {% load crispy_forms_tags %}
-
+{%block main-top%}
+{%endblock%}
 {% block main %}
-<h1>Create new character</h1>
-
-<form method="POST">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
+<div class="parent-main-container create-char-container">
+    <div class="floating-menu create-char">
+    <h1>Create new character</h1>
+        <div class="crispy-input create-char-form">
+            <div class="button-list">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn-basic">Create</button>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
 {% endblock main %}
+{%block main-bottom%}
+{%endblock%}
 

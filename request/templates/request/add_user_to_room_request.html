@@ -1,8 +1,8 @@
-{% extends 'home/base.html' %}
+{% extends 'home/menu.html' %}
 {% load crispy_forms_tags %}
 
 {% block main %}
-<h1>Create Request</h1>
+<h2>Create request to join room {{room}}</h2>
 
 {% if error %}
 <div class="alert alert-block alert-danger">
@@ -13,12 +13,13 @@
     </ul>
 </div>
 {% endif %}
-
+<div class="crispy-input">
 <form method="POST">
     {% csrf_token %}
-    <label>Room name: {{room}}</label>
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">Create</button>
+    <h1>
+    {{ form|crispy }}</h1>
+    <button type="submit" class="btn-basic">Create</button>
 </form>
-<a class="login_link" href="{% url 'home' %}">Home</a>
+</div>
+<a class="btn-basic" href="{% url 'home' %}">Home</a>
 {% endblock main %}

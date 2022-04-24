@@ -1,9 +1,9 @@
-{% extends 'home/base.html' %}
+{% extends 'home/menu.html' %}
 {% load crispy_forms_tags %}
 
 {% block main %}
 
-<h1>Create new Room</h1>
+<h2>Create new room</h2>
 
 {% if error %}
 <div class="alert alert-block alert-danger">
@@ -12,11 +12,12 @@
     </ul>
 </div>
 {% endif %}
-
+<div class="crispy-input">
 <form method="POST">
     {% csrf_token %}
     {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="submit" class="btn-basic btn-active">Create</button>
 </form>
-<a class="login_link" href="{% url 'home' %}">Home</a>
+</div>
+<a class="btn-basic" href="{% url 'home' %}">Home</a>
 {% endblock main %}

@@ -1,8 +1,6 @@
-{% extends 'home/base.html' %}
+{% extends 'home/menu.html' %}
 
 {% block main %}
-<a class="leaveutton" href="{% url 'home' %}">Home page</a>
-
 {% if error %}
 <div class="alert alert-block alert-danger">
     <ul class=m-0>
@@ -10,26 +8,35 @@
     </ul>
 </div>
 {% endif %}
-
+<h2>All public rooms</h2>
+<div class="crispy-input crispy-search">
 <form method="post">
     {% csrf_token %}
     <label for="search">Search Room: </label>
     <input type="text" id="search" name="search">
 </form>
-
-<ul>
+</div>
+<div class="menu-section">
+    <table>
     {% for room in rooms %}
-    <li>
-        {{ room }} | {{room.gamemaster}}<br>
-        {{ room.description }}
-        <form method="post">
+    <tr>
+        <th style="width:70%;">
+            <label class="item-name">{{ room }} | {{room.gamemaster}}</label><br>
+            <label class="item-desc">{{room.description}}</label> 
+        </th>
+        <th style="width:30%">
+            <div class="crispy-input">
+            <form method="post"></form>
             {% csrf_token %}
-            <input type="hidden" id="room" name="room" value="{{room}}">
-            <button type="submit">Send Request</button>
-        </form>
-    </li>
+                <input type="hidden" id="room" name="room" value="{{room}}">
+                <button class="btn-basic btn-small go-small" type="submit">Send request</button>
+            </form>
+            </div>
+        </th>
+    </tr>
     {% endfor %}
-</ul>
+    </table>
+</div>
 
 <div style="display: flex">
     {% if first %}
@@ -45,5 +52,8 @@
     {% if next %}
         <a href="{% url 'allPublicRooms' id_page|add:1 %}">&gt</a>
     {% endif %}
+</div>
+<div id="menu-bottom-glue">
+    <a class="btn-basic" href="{% url 'home' %}">Home</a>
 </div>
 {% endblock main %}

@@ -1,13 +1,17 @@
-{% extends 'home/base.html' %}
+{% extends 'home/menu.html' %}
 
 {% block main %}
-<p>User: {{request.user}}<br>
-Message : {{request.message}}</p>
+<h1>User: {{request.user}}<h1>
+<h1>Message : {{request.message}}</h1>
+<div class="crispy-input">
 <form method="POST">
     {%csrf_token%}
     <input type="hidden" name="request_id" value="{{request.id}}">
-    <input type="submit" value="accept" name="status">
-    <input type="submit" value="reject" name="status">
+    <div class="button-list-inline">
+        <input class="btn-basic accept" type="submit" value="accept" name="status">
+        <input class="btn-basic reject" type="submit" value="reject" name="status">
+    </div>
 </form>
-<a class="login_link" href="{% url 'home' %}">Home</a>
+</div>
+<a class="btn-basic" href="{% url 'home' %}">Home</a>
 {% endblock main %}

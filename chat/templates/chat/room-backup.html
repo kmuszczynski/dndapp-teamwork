@@ -7,13 +7,12 @@
     <meta charset="utf-8" />
     <title>Chat Room</title>
     <link rel="stylesheet" type="text/css" href="{% static 'room.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
 <body>
     <div id="left">
         <div id="nav">
             <div id="leave">
-                <a class="btn btn-leave" href="{% url 'home' %}">Leave Room</a>
+                <a id="leavebutton" href="{% url 'home' %}">Leave Room</a>
             </div>
             <div id="title">
                 {{room_name}}
@@ -32,13 +31,13 @@
     <div id="right">
         <div id="nav">
             <div id="button_right_nav">
-                <button class="btn btn-chat" onclick="create_chat()">Chat</button>
+                <button id="chat_button" onclick="create_chat()">Chat</button>
             </div>
             <div id="button_right_nav">
-                <button class="btn btn-list"  onclick="get_character_list()">Character List</button>
+                <button id="char_list_button" onclick="get_character_list()">Character List</button>
             </div>
             <div id="button_right_nav2">
-                <button class="btn btn-player"  onclick="player_panel()">Player</button>
+                <button id="player_panel_button" onclick="player_panel()">Player</button>
             </div>
         </div>
         <div id="right_content">
@@ -53,17 +52,17 @@
                     {% endfor %}
                 </div>
 
-                <textarea id="chat-message-input" placeholder="Type here to send a message..."type="text" size="100"></textarea>
-                <input class="btn btn-message" id="chat-message-submit" type="button" value="Send">
+                <input class="textInput" id="chat-message-input" type="text" size="50">
+                <input class="button" id="chat-message-submit" type="button" value="Send">
             </div>
 
             <div id="char_list">
-                <h1>Lista postaci gracza:</h1>
+                <div>Lista postaci gracza:</div>
                 {% for character in playerCharacters %}
-                    <a class="btn btn-edit-char" href="{% url 'view_character' character.id %}">{{character.name}}</a><br>
-                {% endfor %}
-                <h1>Lista postaci innych graczy:</h1>
-                <div id="char-list-details">
+                    <a href="{% url 'view_character' character.id %}">{{character.name}}</a><br>
+                {% endfor %}<br>
+                <div>Lista postaci innych graczy:</div>
+                <div id="char-list">
                     {% for character in otherCharactersList %}
                         {{character.name}}<br>
                     {% endfor %}
@@ -71,7 +70,7 @@
             </div>
             
             <div id="player_panel">
-                <a class="btn btn-create-char" href="{% url 'create_character' room_name %}">Create character</a><br><br>
+                <a href="{% url 'create_character' room_name %}">Create character</a><br><br>
             </div>
 
             <div id="active_element">

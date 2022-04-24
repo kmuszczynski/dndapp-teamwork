@@ -1,13 +1,19 @@
 {% extends 'home/base.html' %}
 
 {% block main %}
-<h2>A gigantic list of currently implemented Features:</h2>
-<h3>List of your, and only your, characters:</h3>
-<ul>
-    {% for character in characters %}
-    <li><a href="{% url 'view_character' character.id %}">{{ character }}</li></a>
-    {% endfor %}
-</ul>
-<a href="{% url 'create_character' %}">Create Character</a>
-<a href="{% url 'profile' %}">Profile</a>
+<div class="parent-main-container">
+    <div class="floating-menu">
+        <div class="button-list">
+            <h2>A gigantic list of currently implemented Features:</h2>
+            <h3>List of your, and only your, characters:</h3>
+            <ul>
+                {% for character in characters %}
+                <li><a href="{% url 'view_character' character.id %}">{{ character }}</li></a>
+                {% endfor %}
+            </ul>
+            <a class="btn-basic" href="{% url 'create_character' %}">Create Character</a>
+            <a class="btn-basic" href="{% url 'profile' %}">Profile</a>
+        </div>
+    </div>
+</div>
 {% endblock main %}

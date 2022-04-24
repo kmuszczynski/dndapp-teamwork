@@ -1,12 +1,11 @@
-{% extends 'home/base.html' %}
+{% extends 'home/menu.html' %}
 {% load crispy_forms_tags %}
 
 {% block main %}
 <div>
-    <h3>Logout</h3>
-    <p>You have been logged out</p>
-    <a href="{% url 'login' %}">Log In Again</a>
-    <p>Or go back to home page</p>
-    <a href="{% url 'home' %}">Go back</a>
+    <h2>Logout</h2>
+    <h1>You have been logged out</h1>
+    <a class="btn-basic btn-bigger" href="{% url 'login' %}">Log In Again</a>
+    <a class="btn-basic btn-bigger" href="{% url 'home' %}">Home</a>
 </div>
 {% endblock main %}
