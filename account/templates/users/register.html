@@ -3,15 +3,15 @@
 
 {% block main %}
 <div>
-    <h2>Sing up</h2>
+    <h2>Sign up</h2>
     <div class="crispy-input">
         <form method="POST">
             {% csrf_token %}
             {{form|crispy}}
-            <button type="submit" class="btn-basic btn-active">Sing up</button>
+            <button type="submit" class="btn-basic btn-active">Sign up</button>
         </form>
     </div>
-        <a class="btn-basic" href="{% url 'login' %}">Sing In</a>
+        <a class="btn-basic" href="{% url 'login' %}">Sign In</a>
         <a class="btn-basic" href="{% url 'home' %}">Back</a>
 
 
