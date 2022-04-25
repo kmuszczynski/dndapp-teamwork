@@ -55,3 +55,12 @@ def download_character_as_json(request, character_pk):
     response = HttpResponse(json_character, content_type='application/json')
     response['Content-Disposition'] = f'attachment; filename={character["name"]}.json'
     return response
+
+
+@login_required
+def upload_character_from_json(request):
+    _, file = request.FILES.popitem()
+    file = file[0]
+    character_data = json.load(file)
+    character_form = CharacterForm(data=character_data, instance=character)
+    return render(request, 'charsheets/createchar.html', {'form': character_form})
