@@ -1,11 +1,3 @@
-:root{
-    --bg: #e8ebf1;
-    --btn: #bed0e7;
-    --active-btn: #a3bbdb;
-    --light: #ffffff;
-    --heavy-accent: #476996;
-}
-
 html,
 body { 
     height: 100%;

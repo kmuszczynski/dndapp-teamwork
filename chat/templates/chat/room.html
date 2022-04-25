@@ -58,14 +58,14 @@
             </div>
 
             <div id="char_list">
-                <h1>Lista postaci gracza:</h1>
+                Lista postaci gracza:
                 {% for character in playerCharacters %}
-                    <a class="btn btn-edit-char" href="{% url 'view_character' character.id %}">{{character.name}}</a><br>
+                    <a class="btn btn-edit-char" href="{% url 'view_character' character.id %}">{{character.name}}</a>
                 {% endfor %}
-                <h1>Lista postaci innych graczy:</h1>
+                Lista postaci innych graczy:
                 <div id="char-list-details">
                     {% for character in otherCharactersList %}
-                        {{character.name}}<br>
+                        {{character.name}}
                     {% endfor %}
                 </div>
             </div>
@@ -75,10 +75,11 @@
             </div>
 
             <div id="active_element">
-                <h3>Edit Active Token</h3>
-                <label>Set Token Name: </label><br>
+                <div class="crispy-input">
+                <label>Set Token Name: </label>
                 <input type="text" id="token_name_input"></intput>
-                <button type="submit" id="token_name_button">Set name</button>
+                <button class="btn btn-edit-char" type="submit" id="token_name_button">Set name</button>
+            </div>
             </div>
         </div>
     </div>
