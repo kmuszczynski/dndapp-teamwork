@@ -100,6 +100,8 @@ body{
     resize:vertical;
     border:none;
     width:92%;
+    hyphens:auto;
+    word-wrap: break-word;
 }
 #chat-message-input{
     height: 10vh;
