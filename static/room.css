@@ -37,7 +37,6 @@ body{
     background-color: var(--btn);
 }
 #board{
-    height: 800px;
     overflow-x: scroll;
     overflow-y: scroll;
 }
@@ -71,7 +70,7 @@ body{
     font-weight: normal;
 }
 
-#right_content{
+#right_content,#board{
     height: 94%;
 }
 
