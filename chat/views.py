@@ -19,8 +19,8 @@ def create_chat_room(request):
             new_room = form.save(commit=False)
             new_room.gamemaster = request.user
             new_room.status = 1 if form.cleaned_data['status'] == "PUBLIC" else 2
-            new_room.grid_x=0
-            new_room.grid_y=0
+            new_room.grid_x = 0
+            new_room.grid_y = 0
             new_room.save()
             return redirect("home")
     else:
@@ -33,14 +33,14 @@ def room(request, room_name):
     chats = []
 
     room = ChatRoom.objects.filter(name=room_name).first()
-    gm = request.user==room.gamemaster
+    gm = request.user == room.gamemaster
     user = UserBelongsToRoom.objects.filter(user=request.user).filter(room=room)
     if not room or (not user and not gm):
         return render(request, 'chat/error.html')
 
     chats = Chat.objects.filter(room=room)
 
-    characters=Character.objects.filter(room=room)
+    characters = Character.objects.filter(room=room)
 
     if not gm:
         playerCharacters = characters.filter(user=request.user)

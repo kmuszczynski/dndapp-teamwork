@@ -33,7 +33,7 @@ def create_character(request, room_name):
 def view_character(request, character_pk):
     character = get_object_or_404(Character, pk=character_pk)
 
-    if character.user==request.user:
+    if character.user == request.user:
         if request.method == 'POST':
             form = CharacterForm(request.POST, instance=character)
             if form.is_valid():

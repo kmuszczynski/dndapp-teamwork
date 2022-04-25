@@ -27,11 +27,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)
-		type = text_data_json['type']
+		message_type = text_data_json['type']
 		message = text_data_json['message']
 		room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
 
-		if type=="grid":
+		if message_type=="grid":
 			grid = message.split(" ")
 			await database_sync_to_async(ChatRoom.objects.filter(name=self.room_name).update)(grid_x=int(grid[0]))
 			await database_sync_to_async(ChatRoom.objects.filter(name=self.room_name).update)(grid_y=int(grid[1]))
@@ -44,7 +44,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 					'y': grid[1],
 				})
 
-		if type=="message" or type=="roll":
+		if message_type=="message" or message_type=="roll":
 			date = datetime.now().ctime().split(' ')[3][:5]
 
 			chat = Chat(

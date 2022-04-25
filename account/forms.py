@@ -15,5 +15,5 @@ class UserRegisterForm(UserCreationForm):
     password2 = forms.CharField(help_text='', widget=(forms.PasswordInput(attrs={'class': 'form-control'})))
 
     class Meta:
-        model=User
-        fields=['username', 'email', 'password1', 'password2']
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']

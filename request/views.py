@@ -17,11 +17,11 @@ def request_add_user_to_room(request, room_name):
             room = ChatRoom.objects.get(name=room_name)
 
             if len(user_belongs):
-                error = "You already belongs to this room!!!"
+                error = "You already belong to this room!!!"
             elif len(user_request):
                 error = "You have already sent request!!!"
             elif request.user == room.gamemaster:
-                error = "You are gamemaster in this room!!!"
+                error = "You are the game master of this room!!!"
             else:
                 new_request = form.save(commit=False)
                 new_request.room = room
