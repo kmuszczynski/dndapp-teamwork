@@ -129,12 +129,11 @@ body{
 }
 
 .row{
-    height: 50px;
     display:flex;
 }
-
 .element{
     height: 50px;
-    width: 50px;
-    border-style: groove;
+    min-width: 50px;
+    border: var(--heavy-accent) outset;
+    border-radius:10%;
 }
