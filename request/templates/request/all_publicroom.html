@@ -26,7 +26,7 @@
         </th>
         <th style="width:30%">
             <div class="crispy-input">
-            <form method="post"></form>
+            <form method="post">
             {% csrf_token %}
                 <input type="hidden" id="room" name="room" value="{{room}}">
                 <button class="btn-basic btn-small go-small" type="submit">Send request</button>
