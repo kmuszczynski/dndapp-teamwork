@@ -74,13 +74,39 @@ class ChatConsumer(AsyncWebsocketConsumer):
 					'user': str(self.scope["user"]),
 					'date': "%s" % date,
 				})
-		elif message_type=="activate_grid":
-			await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).filter(status=1).update)(status=2)
-			await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).filter(id=int(message)).update)(status=1)
-
-			grid = await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).get)(id=int(message))
+		elif message_type == "activate_grid" or message_type == "set_token_name":
+			grid = await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).get)(status=1)
 			gridAreaWithCharacter = await database_sync_to_async(list)(GridAreaWithCharacter.objects.filter(grid=grid))
 
+			if message_type == "activate_grid":
+				print("dupa")
+				await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).filter(status=1).update)(status=2)
+				await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).filter(id=int(message)).update)(status=1)
+			else:
+				message = message.split(" ")
+				message[0]=message[0].replace('x', '').split("y")
+				x = int(message[0][0])
+				y = int(message[0][1])
+				name = message[1]
+
+				id = -1
+				for i in range(len(gridAreaWithCharacter)):
+					if gridAreaWithCharacter[i].row == y and gridAreaWithCharacter[i].column == x:
+						id = gridAreaWithCharacter[i].id
+				
+				if id != -1:
+					await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=id).update)(character=name)
+				else:
+					gridArea = GridAreaWithCharacter(
+						column=x,
+						row=y,
+						grid=grid,
+						character=name,
+					)
+					await database_sync_to_async(gridArea.save)()
+
+			grid = await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).get)(status=1)
+			gridAreaWithCharacter = await database_sync_to_async(list)(GridAreaWithCharacter.objects.filter(grid=grid))
 			gridAreaWithCharacterIdList = []
 			for i in range(len(gridAreaWithCharacter)):
 				x = []

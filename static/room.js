@@ -64,7 +64,9 @@ chatSocket.onmessage = function(e) {
         for (var i = 0; i < gridAreaWithCharacter.length; i += 3){
             var id = 'x' + gridAreaWithCharacter[i] + 'y' + gridAreaWithCharacter[i + 1];
             grid_area = document.getElementById(id);
-            grid_area.innerHTML = gridAreaWithCharacter[i + 2];
+            if(grid_area != null){
+                grid_area.innerHTML = gridAreaWithCharacter[i + 2];
+            }
         }
     }
     else if (data.type == "message") {
@@ -193,10 +195,13 @@ document.querySelector('#token_name_input').onkeyup = function(e) {
 
 document.querySelector('#token_name_button').onclick = function (e) {
     var input = document.querySelector('#token_name_input');
-    var element = document.getElementById(input.className);
-    element.innerHTML = input.value;
-}
 
+    var message = input.className + " " + input.value;
+    chatSocket.send(JSON.stringify({
+        'type': "set_token_name",
+        'message': message,
+    }));
+}
 
 function activate_grid(id) {
     chatSocket.send(JSON.stringify({

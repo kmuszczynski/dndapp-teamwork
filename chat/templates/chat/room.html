@@ -21,7 +21,13 @@
             </div>
         </div>
         <div id="board">
-
+            {%for row in grid %}
+                <div id={{forloop.counter0}} class="row">
+                    {%for grid_area in row %}
+                        <div id="x{{forloop.counter0}}y{{forloop.parentloop.counter0}}" class="element" onclick="active('x{{forloop.counter0}}y{{forloop.parentloop.counter0}}')">{%if grid_area != "-" %}{{grid_area}}{%endif%}</div>
+                    {%endfor%}
+                </div>
+            {%endfor%}
         </div>
     </div>
     <div id="right">

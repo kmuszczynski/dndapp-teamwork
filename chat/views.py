@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Chat, ChatRoom, UserBelongsToRoom
 from .forms import CreateRoomForm
 from charsheets.models import Character
-from grid.models import Grid
+from grid.models import Grid, GridAreaWithCharacter
 
 INVALID_CHARACTERS = " !\"#$%&'()*+,./:;<=>?@[\]^`{|}~"
 
@@ -40,6 +40,20 @@ def room(request, room_name):
 
     characters = Character.objects.filter(room=room)
 
+    current_grid = Grid.objects.filter(status=1).first()
+    allGridAreaWithCharacters = GridAreaWithCharacter.objects.filter(grid=current_grid)
+
+    grid=[]
+    for i in range(current_grid.rows):
+        row = []
+        for j in range(current_grid.columns):
+            gridAreaWithCharacters = GridAreaWithCharacter.objects.filter(grid=current_grid).filter(row=i).filter(column=j).first()
+            if gridAreaWithCharacters:
+                row.append(gridAreaWithCharacters.character)
+            else:
+                row.append("-")
+        grid.append(row)
+
     if not gm:
         playerCharacters = characters.filter(user=request.user)
         otherCharactersList = characters.exclude(user=request.user)
@@ -50,10 +64,9 @@ def room(request, room_name):
             'chats': chats,
             'playerCharacters': playerCharacters,
             'otherCharactersList': otherCharactersList,
+            'grid': grid,
         })
     else:
-        #obecny grid dla wszystkich
-        #dla obecnego grida wszystkie pola
         grid_list = Grid.objects.filter(room=room)
 
         return render(request, 'chat/room.html', {
@@ -62,4 +75,5 @@ def room(request, room_name):
             'chats': chats,
             'playerCharacters': characters,
             'grid_list': grid_list,
+            'grid': grid,
         })
