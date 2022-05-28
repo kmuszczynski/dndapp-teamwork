@@ -80,10 +80,11 @@ body{
 
 #char_list,
 #player_panel,
-#active_element{
+#active_element,
+#select_grid{
     display:none;
 }
-#char_list,#player_panel,#active_element {
+#char_list,#player_panel,#active_element,#select_grid {
     text-align: center;
     padding:1em;
     font-size: 1.2em;

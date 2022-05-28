@@ -21,13 +21,7 @@
             </div>
         </div>
         <div id="board">
-            {% for row in y %}
-                <div class="row" id="{{forloop.counter}}r">
-                    {% for element in x %}
-                        <div class="element" id="x{{forloop.counter}}y{{forloop.parentloop.counter}}" onclick="active('x{{forloop.counter}}y{{forloop.parentloop.counter}}')"></div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
+
         </div>
     </div>
     <div id="right">
@@ -73,8 +67,18 @@
             
             <div id="player_panel">
                 <a class="btn btn-create-char" href="{% url 'create_character' room_name %}">Create character</a><br><br>
+                {%if gm%}
+                    <button class="btn btn-create-char" onclick="select_grid()">Select grid</button><br><br>
+                {%endif%}
             </div>
-
+                <div id="select_grid">
+                    {%if gm%}
+                    <label>Select Grid</label>
+                    {% for grid in grid_list%}
+                        <button class="btn btn-create-char" id="{{grid.id}}" onclick="activate_grid('{{grid.id}}')">{{grid.name}} ({{grid.columns}}x{{grid.rows}})</button>
+                    {% endfor %}
+                    {%endif%}
+                </div>
             <div id="active_element">
                 <div class="crispy-input">
                 <label>Set Token Name: </label>
@@ -85,6 +89,7 @@
         </div>
     </div>
     {{ room_name|json_script:"room-name" }}
+    {{ gm|json_script:"gm" }}
     <script src="{% static 'room.js' %}"></script>
     <script src="{% static 'sidebar.js' %}"></script>
 </body>

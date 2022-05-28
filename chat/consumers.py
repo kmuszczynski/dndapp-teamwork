@@ -5,6 +5,7 @@ from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
 from datetime import datetime
 from .models import Chat, ChatRoom
+from grid.models import Grid, GridAreaWithCharacter
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -32,19 +33,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
 
 		if message_type=="grid":
-			grid = message.split(" ")
-			await database_sync_to_async(ChatRoom.objects.filter(name=self.room_name).update)(grid_x=int(grid[0]))
-			await database_sync_to_async(ChatRoom.objects.filter(name=self.room_name).update)(grid_y=int(grid[1]))
+			args = message.split(" ")
+
+			grid = Grid(
+				name = args[0],
+				columns = int(args[1]),
+				rows = int(args[2]),
+				status = 2,
+				room = room,
+			)
+
+			await database_sync_to_async(grid.save)()
 
 			await self.channel_layer.group_send(
-				self.room_group_name,
-				{
-					'type': 'chat_grid',
-					'x': grid[0],
-					'y': grid[1],
+				self.room_group_name,{
+					'type': 'add_grid_to_list',
+					'id': grid.id,
+					'name': grid.name,
+					'x': grid.columns,
+					'y': grid.rows,
 				})
-
-		if message_type=="message" or message_type=="roll":
+		elif message_type=="message" or message_type=="roll":
 			date = datetime.now().ctime().split(' ')[3][:5]
 
 			chat = Chat(
@@ -65,6 +74,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
 					'user': str(self.scope["user"]),
 					'date': "%s" % date,
 				})
+		elif message_type=="activate_grid":
+			await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).filter(status=1).update)(status=2)
+			await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).filter(id=int(message)).update)(status=1)
+
+			grid = await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).get)(id=int(message))
+			gridAreaWithCharacter = await database_sync_to_async(list)(GridAreaWithCharacter.objects.filter(grid=grid))
+
+			gridAreaWithCharacterIdList = []
+			for i in range(len(gridAreaWithCharacter)):
+				x = []
+				x.append(gridAreaWithCharacter[i].column)
+				x.append(gridAreaWithCharacter[i].row)
+				x.append(gridAreaWithCharacter[i].character)
+				gridAreaWithCharacterIdList.append(x)
+
+			await self.channel_layer.group_send(
+				self.room_group_name,{
+					'type': 'chat_grid',
+					'x': grid.columns,
+					'y': grid.rows,
+					'gridAreaWithCharacter': json.dumps(gridAreaWithCharacterIdList),
+				})
 
 	async def chat_message(self, event):
 		msg = event['message']
@@ -81,9 +112,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
 	async def chat_grid(self, event):
 		x = event['x']
 		y = event['y']
+		gridAreaWithCharacter = event['gridAreaWithCharacter']
 
 		await self.send(text_data=json.dumps({
-			'type': "grid",
+			'type': "change_grid",
+			'x': x,
+			'y': y,
+			'gridAreaWithCharacter': gridAreaWithCharacter,
+		}, default=str))
+
+	async def add_grid_to_list(self, event):
+		id = event['id']
+		name = event['name']
+		x = event['x']
+		y = event['y']
+
+		await self.send(text_data=json.dumps({
+			'type': "add_grid_to_list",
+			'id': id,
+			'name': name,
 			'x': x,
 			'y': y,
 		}, default=str))

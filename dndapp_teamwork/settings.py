@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'account',
     'home',
     'request',
+    'grid',
 ]
 
 MIDDLEWARE = [

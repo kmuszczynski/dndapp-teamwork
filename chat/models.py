@@ -21,8 +21,6 @@ class ChatRoom(models.Model):
     #1-public, 2-private
     status = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(2)])
     description = TextField(null=True, blank=True)
-    grid_x = models.PositiveIntegerField()
-    grid_y = models.PositiveIntegerField()
 
     def __str__(self):
         return "{}".format(self.name)

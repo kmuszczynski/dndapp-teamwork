@@ -11,7 +11,6 @@ from chat.models import ChatRoom
 # tworzenie postaci z forma opartego na modelu
 @login_required
 def create_character(request, room_name):
-
     room = ChatRoom.objects.filter(name=room_name).first()
     if not room:
         return render(request, 'char/error.html')

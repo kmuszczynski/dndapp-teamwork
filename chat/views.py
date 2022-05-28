@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Chat, ChatRoom, UserBelongsToRoom
 from .forms import CreateRoomForm
 from charsheets.models import Character
-
+from grid.models import Grid
 
 INVALID_CHARACTERS = " !\"#$%&'()*+,./:;<=>?@[\]^`{|}~"
 
@@ -19,8 +19,6 @@ def create_chat_room(request):
             new_room = form.save(commit=False)
             new_room.gamemaster = request.user
             new_room.status = 1 if form.cleaned_data['status'] == "PUBLIC" else 2
-            new_room.grid_x = 0
-            new_room.grid_y = 0
             new_room.save()
             return redirect("home")
     else:
@@ -52,15 +50,16 @@ def room(request, room_name):
             'chats': chats,
             'playerCharacters': playerCharacters,
             'otherCharactersList': otherCharactersList,
-            'x': range(room.grid_x),
-            'y': range(room.grid_y),
         })
     else:
+        #obecny grid dla wszystkich
+        #dla obecnego grida wszystkie pola
+        grid_list = Grid.objects.filter(room=room)
+
         return render(request, 'chat/room.html', {
             'room_name': room_name,
             'gm': True,
             'chats': chats,
             'playerCharacters': characters,
-            'x': range(room.grid_x),
-            'y': range(room.grid_y),
+            'grid_list': grid_list,
         })
