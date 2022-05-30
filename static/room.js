@@ -98,6 +98,7 @@ chatSocket.onmessage = function(e) {
         document.querySelector('#emptyText').remove()
     }
 };
+
 function updateScroll(){
     var scrolledDiv = document.getElementById("chat-log");
     scrolledDiv.scrollTop = scrolledDiv.scrollHeight;
@@ -107,24 +108,112 @@ chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
 };
 
-function roll(message) {
-    var command = message.split(' ');
-    if (message.charAt(0)=='/' && command[1].includes('d')) {
-        var dice = command[1].split('d');
-        if (dice.length != 2 || (dice[0] == "" || dice[1] == "") || (isNaN(dice[0]) || isNaN(dice[1])) || (dice[0].charAt(0) == "-" || dice[0].charAt(0) == "0")) return message;
+// function roll(message) {
+//     var command = message.split(' ');
+//     if (message.charAt(0)=='/' && command[1].includes('d')) {
+//         var dice = command[1].split('d');
+//         if (dice.length != 2 || (dice[0] == "" || dice[1] == "") || (isNaN(dice[0]) || isNaN(dice[1])) || (dice[0].charAt(0) == "-" || dice[0].charAt(0) == "0")) return message;
         
-        var n = parseInt(dice[0], 10);
-        var d = parseInt(dice[1], 10);
-        var arr = [];
-        var sum = 0;
+//         var n = parseInt(dice[0], 10);
+//         var d = parseInt(dice[1], 10);
+//         var arr = [];
+//         var sum = 0;
 
-        for (var i = 0; i < n; i++){
-            var v = Math.floor((Math.random() * d) + 1);
-            sum = sum + v;
-            arr.push(v);
+//         for (var i = 0; i < n; i++){
+//             var v = Math.floor((Math.random() * d) + 1);
+//             sum = sum + v;
+//             arr.push(v);
+//         }
+
+//         return `Rolling ${n}d${d}: [${arr}] SUM: ${sum}`;
+//     }
+//     return message;
+// }
+
+function roll(message) {
+    if (message.charAt(0) === '/') {
+        message = message.replace(/\n$/, '');
+        var command = message.split(' ');
+        var op = 1;
+        var final_message = "";
+        var roll_value;
+        var roll_sum = 0;
+        
+        for (var i = 1; i < command.length; i++) {
+            if (command[i].includes('d')) {
+                if (i !== 1) {
+                    final_message += "\n";
+                }
+
+                dice_roll = command[i].split('d');
+
+                if (dice_roll.length !== 2) {
+                    return ["error", "Too many 'd's in your roll call!"];
+                }
+
+                if (dice_roll[0] === "0") {
+                  return ["error", "You can't roll 0 times... Come on :/"];
+                }
+
+                if (!/^\d+$/.test(dice_roll[0]) && dice_roll[0] !== "") {
+                  return ["error", "Write 1 or higher before d in roll call!"];
+                }
+
+                times = (dice_roll[0] === "") ? 1 : parseInt(dice_roll[0], 10);
+
+                if (!/^\d+$/.test(dice_roll[1])) {
+                    return ["error", "Write a numeric value after 'd' >:("];
+                }
+
+                sides = parseInt(dice_roll[1], 10);
+
+                roll_value = 0;
+                var roll_arr = [];
+                for (var j = 0; j < times; j++) {
+                    var curr_roll = Math.floor((Math.random() * sides) + 1);
+                    roll_value += curr_roll;
+                    roll_arr.push(curr_roll);
+                }
+
+                if (op !== 0) {
+                    if (op === 1) {
+                        roll_sum += roll_value;
+                    } else {
+                        roll_sum -= roll_value;
+                    }
+                    op = 0;
+                }
+
+                final_message += `Rolling ${times}d${sides}: [${roll_arr}] SUM: ${roll_value}`;
+            } 
+            else if (command[i] === '+') {
+                op = 1;
+            }
+            else if (command[i] === '-') {
+                op = -1;
+            }
+            else if (/^\d+$/.test(command[i])) {
+                bonus = parseInt(command[i], 10);
+
+                if (op !== 0) {
+                    if (op === 1) {
+                        final_message += `\nBonus +${bonus}`;
+                        roll_sum += bonus;
+                    } else {
+                        final_message += `\nPenalty -${bonus}`;
+                        roll_sum -= bonus;
+                    }
+                    op = 0;
+                }
+            }
+            else {
+                return ["error", "Invalid element of roll call!"];
+            }
         }
 
-        return `Rolling ${n}d${d}: [${arr}] SUM: ${sum}`;
+        final_message += `\nSUM OF ROLLS: ${roll_sum}`;
+
+        return ["roll", final_message];
     }
     return message;
 }
@@ -136,8 +225,7 @@ function isBlank(str) {
 function run_commands(message) {
     var command = message.split(' ');
     if (command[0] == '/roll') {
-        message = roll(message);
-        return ["roll", message]
+        return roll(message);
     }
     if (command[0] == '/grid') {
         if (command.length != 4) {

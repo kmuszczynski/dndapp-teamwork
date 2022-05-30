@@ -44,15 +44,16 @@ def room(request, room_name):
     allGridAreaWithCharacters = GridAreaWithCharacter.objects.filter(grid=current_grid)
 
     grid=[]
-    for i in range(current_grid.rows):
-        row = []
-        for j in range(current_grid.columns):
-            gridAreaWithCharacters = GridAreaWithCharacter.objects.filter(grid=current_grid).filter(row=i).filter(column=j).first()
-            if gridAreaWithCharacters:
-                row.append(gridAreaWithCharacters.character)
-            else:
-                row.append("-")
-        grid.append(row)
+    if current_grid:
+        for i in range(current_grid.rows):
+            row = []
+            for j in range(current_grid.columns):
+                gridAreaWithCharacters = GridAreaWithCharacter.objects.filter(grid=current_grid).filter(row=i).filter(column=j).first()
+                if gridAreaWithCharacters:
+                    row.append(gridAreaWithCharacters.character)
+                else:
+                    row.append("-")
+            grid.append(row)
 
     if not gm:
         playerCharacters = characters.filter(user=request.user)
