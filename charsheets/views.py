@@ -48,18 +48,10 @@ def view_character(request, character_pk):
 @login_required
 def download_character_as_json(request, character_pk):
     character = model_to_dict(get_object_or_404(Character, pk=character_pk, user=request.user))
+    character.pop("id")
     character.pop("user")
     character.pop("room")
     json_character = json.dumps(character)
     response = HttpResponse(json_character, content_type='application/json')
     response['Content-Disposition'] = f'attachment; filename={character["name"]}.json'
     return response
-
-
-@login_required
-def upload_character_from_json(request):
-    _, file = request.FILES.popitem()
-    file = file[0]
-    character_data = json.load(file)
-    character_form = CharacterForm(data=character_data, instance=character)
-    return render(request, 'charsheets/createchar.html', {'form': character_form})

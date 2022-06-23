@@ -7,6 +7,8 @@
     <div class="floating-menu create-char">
     <h1>Create new character</h1>
         <div class="crispy-input create-char-form">
+            <input type="file" id="selectedFile" class="" value="Upload"/>
+            <button id="upload" class="btn-basic">Upload</button>
             <div class="button-list">
             <form method="POST">
                 {% csrf_token %}
@@ -17,6 +19,27 @@
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('upload').onclick = () => {
+        var files = document.getElementById('selectedFile').files;
+
+        if (files.length <= 0) {
+            return;
+        }
+
+        var file_rd = new FileReader();
+
+        file_rd.onload = (f) => {
+            var json_contents = JSON.parse(f.target.result);
+            
+            Object.keys(json_contents).forEach((key) => {
+                document.getElementById('id_'.concat(key)).value = json_contents[key];
+            });
+        }
+
+        file_rd.readAsText(files.item(0));
+    }
+</script>
 {% endblock main %}
 {%block main-bottom%}
 {%endblock%}
