@@ -5,8 +5,8 @@
 {% block main %}
 <div class="parent-main-container create-char-container">
     <div class="floating-menu create-char">
-        <a class="btn-basic btn-small" class="login_link" href="{% url 'home' %}">Home</a>
     <h1>Edit your character</h1>
+    <a href="{% url 'download_character' character.id %}" class="btn-basic">Download JSON</a>
         <div class="crispy-input create-char-form">
             <div class="button-list">
             <form method="POST">
