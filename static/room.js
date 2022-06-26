@@ -71,6 +71,24 @@ chatSocket.onmessage = function(e) {
             if (grid_area != null) {
                 grid_area.innerHTML = gridAreaWithCharacter[i + 2];
                 grid_area.style.backgroundColor = gridAreaWithCharacter[i + 3];
+
+                var count = 0;
+                var light_color = "89abcdef";
+                for (var j = 1; j < 6; j += 2){
+                    for (var z = 0; z < light_color.length; z++){
+                        if (gridAreaWithCharacter[i + 3][j] == light_color[z]) {
+                            count += 1;
+                        }
+                    }
+                }
+
+
+                if (count > 0) {
+                    grid_area.style.color = "black";
+                }
+                else {
+                    grid_area.style.color = "white";
+                }
             }
         }
     }

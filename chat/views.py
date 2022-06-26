@@ -50,9 +50,24 @@ def room(request, room_name):
             for j in range(current_grid.columns):
                 gridAreaWithCharacters = GridAreaWithCharacter.objects.filter(grid=current_grid).filter(row=i).filter(column=j).first()
                 if gridAreaWithCharacters:
-                    row.append([gridAreaWithCharacters.character, gridAreaWithCharacters.color])
+                    color = gridAreaWithCharacters.color
+                    count = 0
+                    
+                    for z in range(1, 6, 2):
+                        print(color[z], end=" ")
+                        if "89abcdef".find(color[z])!=-1:
+                            print("tak")
+                            count += 1
+
+                    if count > 0:
+                        text_color = "black"
+                    else:
+                        text_color = "white"
+
+                    row.append([gridAreaWithCharacters.character, gridAreaWithCharacters.color, text_color])
                 else:
-                    row.append(["-", "-"])
+                    row.append(["-", "-", "-"])
+            
             grid.append(row)
 
 

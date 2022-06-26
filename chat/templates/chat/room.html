@@ -25,7 +25,7 @@
                 <div id={{forloop.counter0}} class="row">
                     {%for x in row %}
                         {% if x.0 != "-" %}
-                            <div id="x{{forloop.counter0}}y{{forloop.parentloop.counter0}}" style="background-color: {{x.1}};" class="element"
+                            <div id="x{{forloop.counter0}}y{{forloop.parentloop.counter0}}" style="background-color: {{x.1}}; color: {{x.2}}" class="element"
                                 onclick="active('x{{forloop.counter0}}y{{forloop.parentloop.counter0}}')">
                                 {{x.0}}
                             </div>
