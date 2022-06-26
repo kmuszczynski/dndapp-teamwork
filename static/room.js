@@ -13,8 +13,8 @@ const chatSocket = new WebSocket(
 function active(element_id) {
     var divs = document.querySelectorAll(".element");
     divs.forEach((div) => {
-        if (div.style.backgroundColor == "green") {
-            div.style.backgroundColor = "white";   
+        if (div.style.borderColor == "red") {
+            div.style.borderColor = null;   
         }
     })
     
@@ -24,7 +24,11 @@ function active(element_id) {
     }
     else element = element_id;   
 
-    element.style.backgroundColor = "green";
+    element.style.borderColor = "red";
+
+    if (element.style.backgroundColor === "") {
+        element.style.backgroundColor = "#ffffff";
+    }
 
     active_element(element);
 }
@@ -47,7 +51,7 @@ chatSocket.onmessage = function(e) {
         var x = parseInt(data.x, 10);
         var y = parseInt(data.y, 10);
         var gridAreaWithCharacter = data.gridAreaWithCharacter.replaceAll(']', '').replaceAll('[', '').replaceAll(',', '').replaceAll('"', '').split(" ");
-
+        
         var board = document.getElementById('board');
         board.innerHTML = "";
         for (var i = 0; i < y; i++) {
@@ -61,11 +65,12 @@ chatSocket.onmessage = function(e) {
             board.appendChild(row);
         }
 
-        for (var i = 0; i < gridAreaWithCharacter.length; i += 3){
+        for (var i = 0; i < gridAreaWithCharacter.length; i += 4){
             var id = 'x' + gridAreaWithCharacter[i] + 'y' + gridAreaWithCharacter[i + 1];
             grid_area = document.getElementById(id);
-            if(grid_area != null){
+            if (grid_area != null) {
                 grid_area.innerHTML = gridAreaWithCharacter[i + 2];
+                grid_area.style.backgroundColor = gridAreaWithCharacter[i + 3];
             }
         }
     }
@@ -266,6 +271,16 @@ document.querySelector('#token_name_button').onclick = function (e) {
     chatSocket.send(JSON.stringify({
         'type': "set_token_name",
         'message': message,
+    }));
+}
+
+document.querySelector('#change_token_color').onchange = function (e) {
+    var input = document.querySelector('#change_token_color');
+    var message = input.className + " " + input.value;
+
+    chatSocket.send(JSON.stringify({
+        'type': "set_token_color",
+        'message': message
     }));
 }
 

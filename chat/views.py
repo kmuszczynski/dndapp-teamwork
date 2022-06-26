@@ -50,10 +50,11 @@ def room(request, room_name):
             for j in range(current_grid.columns):
                 gridAreaWithCharacters = GridAreaWithCharacter.objects.filter(grid=current_grid).filter(row=i).filter(column=j).first()
                 if gridAreaWithCharacters:
-                    row.append(gridAreaWithCharacters.character)
+                    row.append([gridAreaWithCharacters.character, gridAreaWithCharacters.color])
                 else:
-                    row.append("-")
+                    row.append(["-", "-"])
             grid.append(row)
+
 
     if not gm:
         playerCharacters = characters.filter(user=request.user)

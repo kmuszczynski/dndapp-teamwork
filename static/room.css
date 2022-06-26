@@ -137,4 +137,5 @@ body{
     min-width: 50px;
     border: var(--heavy-accent) outset;
     border-radius:10%;
+    border-width: 5px;
 }

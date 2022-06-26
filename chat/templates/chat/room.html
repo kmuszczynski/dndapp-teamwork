@@ -23,8 +23,16 @@
         <div id="board">
             {%for row in grid %}
                 <div id={{forloop.counter0}} class="row">
-                    {%for grid_area in row %}
-                        <div id="x{{forloop.counter0}}y{{forloop.parentloop.counter0}}" class="element" onclick="active('x{{forloop.counter0}}y{{forloop.parentloop.counter0}}')">{%if grid_area != "-" %}{{grid_area}}{%endif%}</div>
+                    {%for x in row %}
+                        {% if x.0 != "-" %}
+                            <div id="x{{forloop.counter0}}y{{forloop.parentloop.counter0}}" style="background-color: {{x.1}};" class="element"
+                                onclick="active('x{{forloop.counter0}}y{{forloop.parentloop.counter0}}')">
+                                {{x.0}}
+                            </div>
+                        {% else %}
+                            <div id="x{{forloop.counter0}}y{{forloop.parentloop.counter0}}" class="element"
+                                onclick="active('x{{forloop.counter0}}y{{forloop.parentloop.counter0}}')"></div>
+                        {%endif%}
                     {%endfor%}
                 </div>
             {%endfor%}
@@ -90,6 +98,7 @@
                 <label>Set Token Name: </label>
                 <input type="text" id="token_name_input"></intput>
                 <button class="btn btn-edit-char" type="submit" id="token_name_button">Set name</button>
+                <input type="color" id="change_token_color"></input>
             </div>
             </div>
         </div>

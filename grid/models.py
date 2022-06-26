@@ -18,4 +18,5 @@ class GridAreaWithCharacter(models.Model):
     column = models.PositiveBigIntegerField()
     row = models.PositiveBigIntegerField()
     grid = models.ForeignKey(Grid,on_delete=models.CASCADE)
-    character = models.CharField(max_length=50)
+    character = models.CharField(max_length=50, null=True, blank=True)
+    color = models.CharField(max_length=7, null=True, blank=True)
