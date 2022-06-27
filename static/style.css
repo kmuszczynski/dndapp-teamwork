@@ -99,7 +99,13 @@ a.btn-basic{
     font-weight: normal;
     Color: var(--heavy-accent);
 }
-.crispy-input input[type=text],input[type=password],input[type=email],textarea,select,input[type=number]{
+input[type=file]{
+    display:none;
+}
+label{
+    cursor: pointer;
+}
+.crispy-input input[type=text],input[type=password],input[type=email],textarea,select,input[type=number],input[type=file]{
     border-radius: 1em;
     border: 2px var(--btn) solid;
     background-color: var(--light);

@@ -7,9 +7,12 @@
     <div class="floating-menu create-char">
     <h1>Create new character</h1>
         <div class="crispy-input create-char-form">
-            <input type="file" id="selectedFile" class="" value="Upload"/>
-            <button id="upload" class="btn-basic">Upload</button>
             <div class="button-list">
+                <label for="selectedFile">
+                    Select file
+                    <input id="selectedFile" type="file" value="Upload"/>
+                  </label>
+                <button id="upload" class="btn-basic">Upload</button>
             <form method="POST">
                 {% csrf_token %}
                 {{ form|crispy }}
