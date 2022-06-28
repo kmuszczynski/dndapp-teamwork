@@ -242,8 +242,8 @@ function run_commands(message) {
         else if (isNaN(parseInt(command[2])) || isNaN(parseInt(command[3]))) {
             return ["error", "There was an error with your formula!"]
         }
-        else if (parseInt(command[2]) > 100 || parseInt(command[3]) > 100) {
-            return ["error", "Max grid size (100x100)!"]
+        else if (parseInt(command[2]) > 50 || parseInt(command[3]) > 50) {
+            return ["error", "Max grid size (50x50)!"]
         }
         message = command[1] + " " + parseInt(command[2]) + " " + parseInt(command[3]);
         return ["grid", message]

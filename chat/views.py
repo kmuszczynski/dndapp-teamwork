@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from .models import Chat, ChatRoom, UserBelongsToRoom
+from .models import ChatMessage, ChatRoom, UserBelongsToRoom
 from .forms import CreateRoomForm
 from charsheets.models import Character
 from grid.models import Grid, GridAreaWithCharacter
@@ -36,7 +36,7 @@ def room(request, room_name):
     if not room or (not user and not gm):
         return render(request, 'chat/error.html')
 
-    chats = Chat.objects.filter(room=room)
+    chats = ChatMessage.objects.filter(room=room)
 
     characters = Character.objects.filter(room=room)
 

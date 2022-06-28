@@ -4,7 +4,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
 from datetime import datetime
-from .models import Chat, ChatRoom
+from .models import ChatMessage, ChatRoom
 from grid.models import Grid, GridAreaWithCharacter
 
 
@@ -56,7 +56,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		elif message_type=="message" or message_type=="roll":
 			date = datetime.now().ctime().split(' ')[3][:5]
 
-			chat = Chat(
+			chat_message = ChatMessage(
 						content=message,
                     	#content=run_commands(message),
                     	user=self.scope['user'],
@@ -64,7 +64,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                			timestamp="[%s]" % date
                 	)
 
-			await database_sync_to_async(chat.save)()
+			await database_sync_to_async(chat_message.save)()
 
 			await self.channel_layer.group_send(
 				self.room_group_name,

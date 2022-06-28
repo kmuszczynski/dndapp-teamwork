@@ -5,7 +5,7 @@ from django.db.models.fields import TextField
 from django.core.validators import MaxValueValidator, MinValueValidator 
 
 
-class Chat(models.Model):
+class ChatMessage(models.Model):
     content = models.CharField(max_length=100)
     timestamp = models.CharField(max_length=7)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from charsheets.models import Character
-from chat.models import Chat, ChatRoom, UserBelongsToRoom
+from chat.models import ChatMessage, ChatRoom, UserBelongsToRoom
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 import datetime
@@ -22,8 +22,8 @@ class ChatRoomTestCase(TestCase):
     
         messages = []
         for m in ["message 1", "message 2", "message 3"]:
-            messages.append(Chat.objects.create(content=m, timestamp=datetime.datetime.now(), user=testuser,room=testroom))
-            messages.append(Chat.objects.create(content=m, timestamp=datetime.datetime.now(), user=testuser2,room=testroom))
+            messages.append(ChatMessage.objects.create(content=m, timestamp=datetime.datetime.now(), user=testuser,room=testroom))
+            messages.append(ChatMessage.objects.create(content=m, timestamp=datetime.datetime.now(), user=testuser2,room=testroom))
 
     def test_Room_Creation(self):
         room1 = ChatRoom.objects.get(name="room 1")
@@ -90,7 +90,7 @@ class ChatRoomTestCase(TestCase):
         self.assertEqual(len(b), 0)
 
     def test_Messages_Create(self):
-        chats = Chat.objects.all()
+        chats = ChatMessage.objects.all()
         self.assertEqual(len(chats), 6)
 
     

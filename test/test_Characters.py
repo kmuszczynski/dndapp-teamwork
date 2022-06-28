@@ -1,6 +1,6 @@
 from django.test import TestCase
 from charsheets.models import Character
-from chat.models import Chat, ChatRoom, UserBelongsToRoom
+from chat.models import ChatMessage, ChatRoom, UserBelongsToRoom
 from django.contrib.auth.models import User
 
 class CharacterTestCase(TestCase):
