@@ -26,9 +26,7 @@
                     {%for x in row %}
                         {% if x.0 != "-" %}
                             <div id="x{{forloop.counter0}}y{{forloop.parentloop.counter0}}" style="background-color: {{x.1}}; color: {{x.2}}" class="element"
-                                onclick="active('x{{forloop.counter0}}y{{forloop.parentloop.counter0}}')">
-                                {{x.0}}
-                            </div>
+                                onclick="active('x{{forloop.counter0}}y{{forloop.parentloop.counter0}}')">{{x.0}}</div>
                         {% else %}
                             <div id="x{{forloop.counter0}}y{{forloop.parentloop.counter0}}" class="element"
                                 onclick="active('x{{forloop.counter0}}y{{forloop.parentloop.counter0}}')"></div>
@@ -85,14 +83,14 @@
                     <button class="btn btn-create-char" onclick="select_grid()">Select grid</button><br><br>
                 {%endif%}
             </div>
+                {%if gm%}
                 <div id="select_grid">
-                    {%if gm%}
                     <label>Select Grid</label>
                     {% for grid in grid_list%}
                         <button class="btn btn-create-char" id="{{grid.id}}" onclick="activate_grid('{{grid.id}}')">{{grid.name}} ({{grid.columns}}x{{grid.rows}})</button>
                     {% endfor %}
-                    {%endif%}
                 </div>
+                {%endif%}
             <div id="active_element">
                 <div class="crispy-input">
                 <label>Set Token Name: </label>

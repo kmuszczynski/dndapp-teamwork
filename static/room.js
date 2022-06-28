@@ -37,15 +37,17 @@ chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     
     if (data.type == "add_grid_to_list") {
-        var select_grid_var = document.getElementById('select_grid');
-        var new_grid = document.createElement("button");
-        new_grid.className = "btn btn-create-char";
-        new_grid.id = data.id;
-        new_grid.setAttribute("onclick", "activate_grid('" + new_grid.id + "')");
-        new_grid.innerHTML = data.name + " (" + data.x + "x" + data.y + ")";
-        select_grid_var.appendChild(new_grid);
+        if (document.getElementById('select_grid') != null) {
+            var select_grid_var = document.getElementById('select_grid');
+            var new_grid = document.createElement("button");
+            new_grid.className = "btn btn-create-char";
+            new_grid.id = data.id;
+            new_grid.setAttribute("onclick", "activate_grid('" + new_grid.id + "')");
+            new_grid.innerHTML = data.name + " (" + data.x + "x" + data.y + ")";
+            select_grid_var.appendChild(new_grid);
         
-        select_grid();
+            select_grid();
+        }
     }
     else if (data.type == "change_grid") {
         var x = parseInt(data.x, 10);
@@ -284,12 +286,16 @@ document.querySelector('#token_name_input').onkeyup = function(e) {
 
 document.querySelector('#token_name_button').onclick = function (e) {
     var input = document.querySelector('#token_name_input');
-
-    var message = input.className + " " + input.value;
-    chatSocket.send(JSON.stringify({
-        'type': "set_token_name",
-        'message': message,
-    }));
+    if (input.value.length < 5) {
+        var message = input.className + " " + input.value;
+        chatSocket.send(JSON.stringify({
+            'type': "set_token_name",
+            'message': message,
+        }));
+    }
+    else {
+        alert("4 letters maximum!")
+    }
 }
 
 document.querySelector('#change_token_color').onchange = function (e) {
