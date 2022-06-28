@@ -132,7 +132,7 @@ function updateScroll(){
 }
 
 chatSocket.onclose = function(e) {
-    console.error('Chat socket closed unexpectedly');
+    console.error('Chat socket closed unexpectedly, press f5!');
 };
 
 function roll(message) {
@@ -241,6 +241,9 @@ function run_commands(message) {
         }
         else if (isNaN(parseInt(command[2])) || isNaN(parseInt(command[3]))) {
             return ["error", "There was an error with your formula!"]
+        }
+        else if (parseInt(command[2]) > 100 || parseInt(command[3]) > 100) {
+            return ["error", "Max grid size (100x100)!"]
         }
         message = command[1] + " " + parseInt(command[2]) + " " + parseInt(command[3]);
         return ["grid", message]
@@ -387,6 +390,7 @@ function websocket_send_token_move(key, id) {
 
 let isKeyDown = false;
 let keyDown = "";
+let keyup_timeout;
 
 document.addEventListener('keydown', (e) => {
     var divs = document.querySelectorAll(".element");
@@ -400,8 +404,6 @@ document.addEventListener('keydown', (e) => {
                 var id = div.id;
                 var div_id = div.id.replace("x", "").split("y");
                 if (e.keyCode == 38) {//up
-                    isKeyDown = true;
-                    keyDown = "up";
                     if (div_id[1] != "0") {
                         var up_element = document.getElementById("x" + div_id[0] + "y" + (parseInt(div_id[1]) - 1).toString());
                         if (!up_element.innerHTML) {
@@ -411,10 +413,16 @@ document.addEventListener('keydown', (e) => {
                     else {
                         websocket_send_token_move(id, "up");
                     }
+
+                    clearTimeout(keyup_timeout);
+
+                    keyup_timeout = setTimeout(() => {
+                        isKeyDown = false;
+                    }, 300)
+
+                    isKeyDown = true;
                 }
                 else if (e.keyCode == 40) {//down
-                    isKeyDown = true;
-                    keyDown = "down";
                     if (div_id[1] != (rows-1).toString()) {
                         var down_element = document.getElementById("x" + div_id[0] + "y" + (parseInt(div_id[1]) + 1).toString());
                         if (!down_element.innerHTML) {
@@ -424,10 +432,16 @@ document.addEventListener('keydown', (e) => {
                     else {
                         websocket_send_token_move(id, "down");
                     }
+
+                    clearTimeout(keyup_timeout);
+
+                    keyup_timeout = setTimeout(() => {
+                        isKeyDown = false;
+                    }, 300)
+
+                    isKeyDown = true;
                 }
                 else if (e.keyCode == 37) {//left
-                    isKeyDown = true;
-                    keyDown = "left";
                     if (div_id[0] != "0") {
                         var left_element = document.getElementById("x" + (parseInt(div_id[0]) - 1).toString() + "y" + div_id[1]);
                         if (!left_element.innerHTML) {
@@ -437,10 +451,16 @@ document.addEventListener('keydown', (e) => {
                     else {
                         websocket_send_token_move(id, "left");
                     }
+                
+                    clearTimeout(keyup_timeout);
+
+                    keyup_timeout = setTimeout(() => {
+                        isKeyDown = false;
+                    }, 300)
+
+                    isKeyDown = true;
                 }
                 else if (e.keyCode == 39) {//right
-                    isKeyDown = true;
-                    keyDown = "right";
                     if (div_id[0] != (columns-1).toString()) {
                         var right_element = document.getElementById("x" + (parseInt(div_id[0]) + 1).toString() + "y" + div_id[1]);
                         if (!right_element.innerHTML) {
@@ -450,29 +470,16 @@ document.addEventListener('keydown', (e) => {
                     else {
                         websocket_send_token_move(id, "right");
                     }
+
+                    clearTimeout(keyup_timeout);
+
+                    keyup_timeout = setTimeout(() => {
+                        isKeyDown = false;
+                    }, 300)
+
+                    isKeyDown = true;
                 }
             }
         })
-    }
-})
-
-document.addEventListener('keyup', (e) => {
-    if (isKeyDown) {
-        if (keyDown = "up" && e.keyCode == 38) {
-            isKeyDown = false;
-            keyDown = "";
-        }
-        else if (keyDown = "down" && e.keyCode == 40) {
-            isKeyDown = false;
-            keyDown = "";
-        }
-        else if (keyDown = "left" && e.keyCode == 37) {
-            isKeyDown = false;
-            keyDown = "";
-        }
-        else if (keyDown = "right" && e.keyCode == 39) {
-            isKeyDown = false;
-            keyDown = "";
-        }
     }
 })
