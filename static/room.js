@@ -279,15 +279,30 @@ document.querySelector('#token_name_input').onkeyup = function(e) {
 
 document.querySelector('#token_name_button').onclick = function (e) {
     var input = document.querySelector('#token_name_input');
+
     if (input.value.length < 5) {
-        var message = input.className + " " + input.value;
-        chatSocket.send(JSON.stringify({
-            'type': "set_token_name",
-            'message': message,
-        }));
+        var invalid_characters = " ,[]" + '"'
+        var valid_name = true;
+
+        for (var i = 0; i < input.value.length; i++){
+            for (var j = 0; j < invalid_characters.length; j++){
+                if (input.value[i] == invalid_characters[j]) {
+                    valid_name = false;
+                    alert("Invalid characters in token name!");
+                }
+            }
+        }
+
+        if (valid_name == true) {
+            var message = input.className + " " + input.value;
+            chatSocket.send(JSON.stringify({
+                'type': "set_token_name",
+                'message': message,
+            }));
+        }
     }
-    else {
-        alert("4 letters maximum!")
+    else{
+        alert("4 letters maximum!");
     }
 }
 

@@ -54,9 +54,7 @@ def room(request, room_name):
                     count = 0
                     
                     for z in range(1, 6, 2):
-                        print(color[z], end=" ")
                         if "89abcdef".find(color[z])!=-1:
-                            print("tak")
                             count += 1
 
                     if count > 0:
