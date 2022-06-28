@@ -40,7 +40,7 @@ def room(request, room_name):
 
     characters = Character.objects.filter(room=room)
 
-    current_grid = Grid.objects.filter(status=1).first()
+    current_grid = Grid.objects.filter(room=room).filter(status=1).first()
     allGridAreaWithCharacters = GridAreaWithCharacter.objects.filter(grid=current_grid)
 
     grid=[]
