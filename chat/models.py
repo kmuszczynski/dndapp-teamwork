@@ -17,8 +17,7 @@ class Chat(models.Model):
 
 class ChatRoom(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    # Was DO_NOTHING before - causes IntegrityError, can we use NULL here?
-    gamemaster = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    gamemaster = models.ForeignKey(User, on_delete=models.CASCADE)
     #1-public, 2-private
     status = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(2)])
     description = TextField(null=True, blank=True)
