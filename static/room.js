@@ -230,8 +230,10 @@ function run_commands(message) {
         else if (gm != true) {
             return ["error", "You can't use this command!"]
         }
-        //walidacja danych potrzebna!!!
-        message = command[1] + " " + command[2] + " " + command[3];
+        else if (isNaN(parseInt(command[2])) || isNaN(parseInt(command[3]))) {
+            return ["error", "There was an error with your formula!"]
+        }
+        message = command[1] + " " + parseInt(command[2]) + " " + parseInt(command[3]);
         return ["grid", message]
     }
     else
