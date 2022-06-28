@@ -97,7 +97,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 					'y': grid.rows,
 					'gridAreaWithCharacter': json.dumps(gridAreaWithCharacterIdList),
 				})
-
 		elif message_type == "set_token_name" or message_type == "set_token_color":
 			grid = await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).get)(status=1)
 			gridAreaWithCharacter = await database_sync_to_async(list)(GridAreaWithCharacter.objects.filter(grid=grid))
@@ -146,7 +145,62 @@ class ChatConsumer(AsyncWebsocketConsumer):
 					'color': gridArea.color,
 				}
 			)
+		elif message_type == "token_move":
+			element_id, key = message.split(" ")
 
+			x, y = element_id.replace("x", "").split("y")
+			x = int(x); y = int(y)
+
+			grid = await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).get)(status=1)
+			gridAreaWithCharacter = await database_sync_to_async(list)(GridAreaWithCharacter.objects.filter(grid=grid))
+
+			db_id = -1
+			for i in range(len(gridAreaWithCharacter)):
+				if gridAreaWithCharacter[i].row == y and gridAreaWithCharacter[i].column == x:
+					db_id = gridAreaWithCharacter[i].id
+
+			token = await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=db_id).get)()
+
+			if(key == "up"):
+				if(y==0):
+					await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=db_id).delete)()
+					new_x = -1; new_y = -1
+				else:
+					await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=db_id).update)(row=y-1)
+					new_x = token.column; new_y = token.row-1
+			elif(key == "down"):
+				if(y==(grid.rows-1)):
+					await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=db_id).delete)()
+					new_x = -1; new_y = -1
+				else:
+					await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=db_id).update)(row=y+1)
+					new_x = token.column; new_y = token.row+1
+			elif(key == "left"):
+				if(x==0):
+					await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=db_id).delete)()
+					new_x = -1; new_y = -1
+				else:
+					await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=db_id).update)(column=x-1)
+					new_x = token.column-1; new_y = token.row
+			elif(key == "right"):
+				if(x == (grid.columns-1)):
+					await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=db_id).delete)()
+					new_x = -1; new_y = -1
+				else:
+					await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=db_id).update)(column=x+1)
+					new_x = token.column+1; new_y = token.row
+
+			await self.channel_layer.group_send(
+				self.room_group_name, {
+					'type': 'move_token',
+					'old_x': x,
+					'old_y': y,
+					'new_x': new_x,
+					'new_y': new_y,
+					'character': token.character,
+					'color': token.color,
+				}
+			)
 
 	async def chat_message(self, event):
 		msg = event['message']
@@ -199,3 +253,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			'character': character,
 			'color': color,
 		}, default=str))
+
+	async def move_token(self, event):
+		old_x = event['old_x']
+		old_y = event['old_y']
+		new_x = event['new_x']
+		new_y = event['new_y']
+		character = event['character']
+		color = event['color']
+
+		await self.send(text_data=json.dumps({
+            'type': "move_token",
+            'old_x': old_x,
+            'old_y': old_y,
+            'new_x': new_x,
+        	'new_y': new_y,
+            'character': character,
+            'color': color,
+        }, default=str))

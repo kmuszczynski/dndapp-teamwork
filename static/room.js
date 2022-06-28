@@ -87,6 +87,15 @@ chatSocket.onmessage = function(e) {
 
         set_text_color(data.color, element);
     }
+    else if (data.type == "move_token") {
+        var old_element = document.getElementById("x" + data.old_x + "y" + data.old_y);
+        old_element.innerHTML = ""; old_element.style.background = null; old_element.style.borderColor = null; old_element.style.color = null;
+
+        if (document.getElementById("x" + data.new_x + "y" + data.new_y) != null) {
+            var new_element = document.getElementById("x" + data.new_x + "y" + data.new_y);
+            new_element.innerHTML = data.character; new_element.style.background = data.color; new_element.style.borderColor = "red";
+        }
+    }
     else if (data.type == "message") {
         const messageContainer = document.createElement('div')
         messageContainer.className = 'messageContainer'
@@ -282,6 +291,14 @@ document.querySelector('#token_name_input').onkeyup = function(e) {
 document.querySelector('#token_name_button').onclick = function (e) {
     var input = document.querySelector('#token_name_input');
 
+    var divs = document.querySelectorAll(".element");
+    var active_id = "";
+    divs.forEach((div) => {
+        if (div.style.borderColor == "red") {
+            active_id = div.id;
+        }
+    })
+
     if (input.value.length < 5) {
         var invalid_characters = " ,[]" + '"'
         var valid_name = true;
@@ -295,12 +312,15 @@ document.querySelector('#token_name_button').onclick = function (e) {
             }
         }
 
-        if (valid_name == true) {
-            var message = input.className + " " + input.value;
+        if (valid_name == true && active_id!="") {
+            var message = active_id + " " + input.value;
             chatSocket.send(JSON.stringify({
                 'type': "set_token_name",
                 'message': message,
             }));
+        }
+        else if (active_id==""){
+            console.log("Good try!");
         }
     }
     else{
@@ -310,12 +330,26 @@ document.querySelector('#token_name_button').onclick = function (e) {
 
 document.querySelector('#change_token_color').onchange = function (e) {
     var input = document.querySelector('#change_token_color');
-    var message = input.className + " " + input.value;
 
-    chatSocket.send(JSON.stringify({
-        'type': "set_token_color",
-        'message': message
-    }));
+    var divs = document.querySelectorAll(".element");
+    var active_id = "";
+    divs.forEach((div) => {
+        if (div.style.borderColor == "red") {
+            active_id = div.id;
+        }
+    })
+
+    if (active_id != "") {
+        var message = active_id + " " + input.value;
+
+        chatSocket.send(JSON.stringify({
+            'type': "set_token_color",
+            'message': message
+        }));
+    }
+    else {
+        console.log("Good try!");
+    }
 }
 
 function activate_grid(id) {
@@ -343,3 +377,102 @@ function set_text_color(hex, element) {
         element.style.color = "white";
     }
 }
+
+function websocket_send_token_move(key, id) {
+    chatSocket.send(JSON.stringify({
+        'type': "token_move",
+        'message': key + " " + id,
+    }));
+}
+
+let isKeyDown = false;
+let keyDown = "";
+
+document.addEventListener('keydown', (e) => {
+    var divs = document.querySelectorAll(".element");
+
+    var rows = document.querySelectorAll(".row").length;
+    var columns = divs.length / rows;
+
+    if (!isKeyDown) {
+        divs.forEach((div) => {
+            if (div.style.borderColor == "red" && div.innerHTML) {
+                var id = div.id;
+                var div_id = div.id.replace("x", "").split("y");
+                if (e.keyCode == 38) {//up
+                    isKeyDown = true;
+                    keyDown = "up";
+                    if (div_id[1] != "0") {
+                        var up_element = document.getElementById("x" + div_id[0] + "y" + (parseInt(div_id[1]) - 1).toString());
+                        if (!up_element.innerHTML) {
+                            websocket_send_token_move(id, "up");
+                        }
+                    }
+                    else {
+                        websocket_send_token_move(id, "up");
+                    }
+                }
+                else if (e.keyCode == 40) {//down
+                    isKeyDown = true;
+                    keyDown = "down";
+                    if (div_id[1] != (rows-1).toString()) {
+                        var down_element = document.getElementById("x" + div_id[0] + "y" + (parseInt(div_id[1]) + 1).toString());
+                        if (!down_element.innerHTML) {
+                            websocket_send_token_move(id, "down");
+                        }
+                    }
+                    else {
+                        websocket_send_token_move(id, "down");
+                    }
+                }
+                else if (e.keyCode == 37) {//left
+                    isKeyDown = true;
+                    keyDown = "left";
+                    if (div_id[0] != "0") {
+                        var left_element = document.getElementById("x" + (parseInt(div_id[0]) - 1).toString() + "y" + div_id[1]);
+                        if (!left_element.innerHTML) {
+                            websocket_send_token_move(id, "left");
+                        }
+                    }
+                    else {
+                        websocket_send_token_move(id, "left");
+                    }
+                }
+                else if (e.keyCode == 39) {//right
+                    isKeyDown = true;
+                    keyDown = "right";
+                    if (div_id[0] != (columns-1).toString()) {
+                        var right_element = document.getElementById("x" + (parseInt(div_id[0]) + 1).toString() + "y" + div_id[1]);
+                        if (!right_element.innerHTML) {
+                            websocket_send_token_move(id, "right");
+                        }
+                    }
+                    else {
+                        websocket_send_token_move(id, "right");
+                    }
+                }
+            }
+        })
+    }
+})
+
+document.addEventListener('keyup', (e) => {
+    if (isKeyDown) {
+        if (keyDown = "up" && e.keyCode == 38) {
+            isKeyDown = false;
+            keyDown = "";
+        }
+        else if (keyDown = "down" && e.keyCode == 40) {
+            isKeyDown = false;
+            keyDown = "";
+        }
+        else if (keyDown = "left" && e.keyCode == 37) {
+            isKeyDown = false;
+            keyDown = "";
+        }
+        else if (keyDown = "right" && e.keyCode == 39) {
+            isKeyDown = false;
+            keyDown = "";
+        }
+    }
+})
