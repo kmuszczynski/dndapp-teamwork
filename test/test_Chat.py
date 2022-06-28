@@ -59,7 +59,7 @@ class ChatRoomTestCase(TestCase):
         except:
             pass
 
-    def test_Room_Delete_OnUserDelete(self): # Doesnt work if room has on_delete DO_NOTHING
+    def test_Room_Delete_OnUserDelete(self):
         user1 = User.objects.get(username="testuser")
         room = ChatRoom.objects.get(name="room 1")
         r = ChatRoom.objects.all()
