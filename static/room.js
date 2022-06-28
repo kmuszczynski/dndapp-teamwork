@@ -166,14 +166,15 @@ chatSocket.onclose = function(e) {
 
 function roll(message) {
     if (message.charAt(0) === '/') {
-        message = message.replace(/\n$/, '');
-        var command = message.split(' ');
-        var op = 1;
-        var final_message = "";
-        var roll_value;
-        var roll_sum = 0;
+        message = message.replace("\n", '');
+
+        let command = message.split(' ');
+        let op = 1;
+        let final_message = "";
+        let roll_value;
+        let roll_sum = 0;
         
-        for (var i = 1; i < command.length; i++) {
+        for (let i = 1; i < command.length; i++) {
             if (command[i].includes('d')) {
                 if (i !== 1) {
                     final_message += "\n";
@@ -202,9 +203,9 @@ function roll(message) {
                 sides = parseInt(dice_roll[1], 10);
 
                 roll_value = 0;
-                var roll_arr = [];
-                for (var j = 0; j < times; j++) {
-                    var curr_roll = Math.floor((Math.random() * sides) + 1);
+                let roll_arr = [];
+                for (let j = 0; j < times; j++) {
+                    let curr_roll = Math.floor((Math.random() * sides) + 1);
                     roll_value += curr_roll;
                     roll_arr.push(curr_roll);
                 }
