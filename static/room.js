@@ -74,25 +74,18 @@ chatSocket.onmessage = function(e) {
                 grid_area.innerHTML = gridAreaWithCharacter[i + 2];
                 grid_area.style.backgroundColor = gridAreaWithCharacter[i + 3];
 
-                var count = 0;
-                var light_color = "89abcdef";
-                for (var j = 1; j < 6; j += 2){
-                    for (var z = 0; z < light_color.length; z++){
-                        if (gridAreaWithCharacter[i + 3][j] == light_color[z]) {
-                            count += 1;
-                        }
-                    }
-                }
-
-
-                if (count > 0) {
-                    grid_area.style.color = "black";
-                }
-                else {
-                    grid_area.style.color = "white";
-                }
+                set_text_color(gridAreaWithCharacter[i + 3], grid_area);
             }
         }
+    }
+    else if (data.type == "update_token") {
+        var element_id = "x" + data.x + "y" + data.y;
+        var element = document.getElementById(element_id);
+
+        element.innerHTML = data.character;
+        element.style.backgroundColor = data.color;
+
+        set_text_color(data.color, element);
     }
     else if (data.type == "message") {
         const messageContainer = document.createElement('div')
@@ -313,4 +306,23 @@ function activate_grid(id) {
         'type': "activate_grid",
         'message': id,
     }))
+}
+
+function set_text_color(hex, element) {
+    var count = 0;
+    var light_color = "89abcdef";
+    for (var j = 1; j < 6; j += 2){
+        for (var z = 0; z < light_color.length; z++){
+            if (hex[j] == light_color[z]) {
+                count += 1;
+            }
+        }
+    }
+
+    if (count > 0) {
+        element.style.color = "black";
+    }
+    else {
+        element.style.color = "white";
+    }
 }
