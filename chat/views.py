@@ -76,6 +76,7 @@ def room(request, room_name):
         return render(request, 'chat/room.html', {
             'room_name': room_name,
             'gm': False,
+            'user': request.user.username + " " + room.gamemaster.username,
             'chats': chats,
             'playerCharacters': playerCharacters,
             'otherCharactersList': otherCharactersList,
@@ -87,6 +88,7 @@ def room(request, room_name):
         return render(request, 'chat/room.html', {
             'room_name': room_name,
             'gm': True,
+            'user': request.user.username + " " + room.gamemaster.username,
             'chats': chats,
             'playerCharacters': characters,
             'grid_list': grid_list,

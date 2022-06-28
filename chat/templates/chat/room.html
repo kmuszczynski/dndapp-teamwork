@@ -103,6 +103,7 @@
     </div>
     {{ room_name|json_script:"room-name" }}
     {{ gm|json_script:"gm" }}
+    {{ user|json_script:"user"}}
     <script src="{% static 'room.js' %}"></script>
     <script src="{% static 'sidebar.js' %}"></script>
 </body>

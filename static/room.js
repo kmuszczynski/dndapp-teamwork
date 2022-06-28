@@ -1,6 +1,7 @@
 const chatLog = document.querySelector('#chat-log')
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
 const gm = JSON.parse(document.getElementById('gm').textContent);
+const user = JSON.parse(document.getElementById('user').textContent);
 
 const chatSocket = new WebSocket(
     'ws://'
@@ -11,6 +12,13 @@ const chatSocket = new WebSocket(
 );
 
 function active(element_id) {
+    chatSocket.send(JSON.stringify({
+        'type': "token_active",
+        'message': user + " " + element_id,
+    }));
+}
+
+function can_active(element_id) {
     var divs = document.querySelectorAll(".element");
     divs.forEach((div) => {
         if (div.style.borderColor == "red") {
@@ -89,11 +97,17 @@ chatSocket.onmessage = function(e) {
     }
     else if (data.type == "move_token") {
         var old_element = document.getElementById("x" + data.old_x + "y" + data.old_y);
-        old_element.innerHTML = ""; old_element.style.background = null; old_element.style.borderColor = null; old_element.style.color = null;
+        old_element.innerHTML = ""; old_element.style.background = null; old_element.style.borderColor = null; old_element.style.borderColor = null;
+
+        var active_user = user.split(" ");
 
         if (document.getElementById("x" + data.new_x + "y" + data.new_y) != null) {
             var new_element = document.getElementById("x" + data.new_x + "y" + data.new_y);
-            new_element.innerHTML = data.character; new_element.style.background = data.color; new_element.style.borderColor = "red";
+            new_element.innerHTML = data.character; new_element.style.background = data.color;
+            set_text_color(data.color, new_element);
+            if (active_user[0] == data.user) {
+                new_element.style.borderColor = "red";
+            }
         }
     }
     else if (data.type == "message") {
@@ -120,7 +134,22 @@ chatSocket.onmessage = function(e) {
             updateScroll();
         }   
     }
+    else if (data.type == "active_token") {
+        var active_user = user.split(" ");
 
+        if (active_user[0] == data.user) {
+            var element = document.getElementById("x" + data.x + "y" + data.y);
+
+            if (element.style.borderColor == "red") {
+                element.style.borderColor = null;
+                create_chat();
+            }
+            else {
+                can_active(element.id);
+            }
+        }
+
+    }
     if (document.querySelector('#emptyText')) {
         document.querySelector('#emptyText').remove()
     }

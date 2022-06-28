@@ -127,12 +127,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
 				
 				gridArea = await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=id).first)()
 			else:
+				user = self.scope['user']
+				type(user)
 				gridArea = GridAreaWithCharacter(
 					column=x,
 					row=y,
 					grid=grid,
 					character=name,
 					color=color,
+					user=user,
 				)
 				await database_sync_to_async(gridArea.save)()
 			
@@ -200,8 +203,42 @@ class ChatConsumer(AsyncWebsocketConsumer):
 						'new_y': new_y,
 						'character': token.character,
 						'color': token.color,
+						'user': str(self.scope["user"]),
 					}
 				)
+		elif message_type == "token_active":
+			user, gm, key = message.split(" ")
+
+			x, y = key.replace("x", "").split("y")
+			x = int(x); y = int(y)
+
+			grid = await database_sync_to_async(Grid.objects.filter(room__name=self.room_name).get)(status=1)
+			gridAreaWithCharacter = await database_sync_to_async(list)(GridAreaWithCharacter.objects.filter(grid=grid))
+
+			db_id = -1
+			for i in range(len(gridAreaWithCharacter)):
+				if gridAreaWithCharacter[i].row == y and gridAreaWithCharacter[i].column == x:
+					db_id = gridAreaWithCharacter[i].id
+
+			if db_id != -1:
+				gridArea = await database_sync_to_async(GridAreaWithCharacter.objects.filter(id=db_id).get)()
+				room = await database_sync_to_async(ChatRoom.objects.filter(name=self.room_name).get)()
+				if user == gridArea.user or user == gm:
+					await self.channel_layer.group_send(
+                        self.room_group_name, {
+                            'type': 'active_token',
+                            'x': x,
+                            'y': y,
+                     		'user': str(self.scope["user"]),
+                    })
+			else:
+				await self.channel_layer.group_send(
+                    self.room_group_name, {
+                        'type': 'active_token',
+						'x': x,
+						'y': y,
+						'user': str(self.scope["user"]),
+                })
 
 	async def chat_message(self, event):
 		msg = event['message']
@@ -262,6 +299,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		new_y = event['new_y']
 		character = event['character']
 		color = event['color']
+		user = event['user']
 
 		await self.send(text_data=json.dumps({
             'type': "move_token",
@@ -271,4 +309,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
         	'new_y': new_y,
             'character': character,
             'color': color,
+			'user': user,
         }, default=str))
+
+	async def active_token(self, event):
+		x = event['x']
+		y = event['y']
+		user = event['user']
+
+		await self.send(text_data=json.dumps({
+			'type': "active_token",
+			'x': x,
+			'y': y,
+			'user': user,
+		}, default=str))
