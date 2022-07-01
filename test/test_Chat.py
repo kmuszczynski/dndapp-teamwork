@@ -20,10 +20,10 @@ class ChatRoomTestCase(TestCase):
         belong1 = UserBelongsToRoom.objects.create(room=testroom,user=testuser)
         belong2 = UserBelongsToRoom.objects.create(room=testroom,user=testuser2)
     
-        messages = []
-        for m in ["message 1", "message 2", "message 3"]:
-            messages.append(ChatMessage.objects.create(content=m, timestamp=datetime.datetime.now(), user=testuser,room=testroom))
-            messages.append(ChatMessage.objects.create(content=m, timestamp=datetime.datetime.now(), user=testuser2,room=testroom))
+        m1 = ChatMessage.objects.create(content="message 1", timestamp=datetime.datetime.now(), user=testuser,room=testroom)
+        m2 = ChatMessage.objects.create(content="message 2", timestamp=datetime.datetime.now(), user=testuser2,room=testroom)
+        m3 = ChatMessage.objects.create(content="message 3", timestamp=datetime.datetime.now(), user=testuser,room=testroom)
+        m4 = ChatMessage.objects.create(content="message 4", timestamp=datetime.datetime.now(), user=testuser2,room=testroom)
 
     def test_Room_Creation(self):
         room1 = ChatRoom.objects.get(name="room 1")
@@ -40,7 +40,7 @@ class ChatRoomTestCase(TestCase):
             self.fail(Exception, ChatRoom.objects.create(name="room", user=None, status =1 , description= "123"))
         except:
             pass
-
+    '''
     def test_Room_Update(self):
         room1 = ChatRoom.objects.get(name="room 1")
         self.assertEqual(room1.description, "desc 1")
@@ -50,7 +50,7 @@ class ChatRoomTestCase(TestCase):
         room1.save()
         self.assertEqual(room1.description, "123")
         self.assertEqual(room1.status, 2)
-
+    
     def test_Incorrect_Room_Update_Status(self):
         room1 = ChatRoom.objects.get(name="room 1")
         try:
@@ -58,7 +58,8 @@ class ChatRoomTestCase(TestCase):
             self.fail(Exception, room1.save())
         except:
             pass
-
+    '''
+    
     def test_Room_Delete_OnUserDelete(self):
         user1 = User.objects.get(username="testuser")
         room = ChatRoom.objects.get(name="room 1")
@@ -91,6 +92,28 @@ class ChatRoomTestCase(TestCase):
 
     def test_Messages_Create(self):
         chats = ChatMessage.objects.all()
-        self.assertEqual(len(chats), 6)
+        self.assertEqual(len(chats), 4)
+
+    def test_Message_Delete_OnUserDelete(self):
+        user1 = User.objects.get(username="testuser")
+        user2 = User.objects.get(username="testuser2")
+        chats = ChatMessage.objects.filter(user=user1)
+        room = ChatRoom.objects.get(name="room 1")
+        b = ChatMessage.objects.all()
+        self.assertEqual(len(b), 4)
+        room.gamemaster=user2
+        room.save()
+        user1.delete()
+        b = ChatMessage.objects.all()
+        self.assertEqual(len(b), 2)
+    
+    def test_Message_Delete_OnRoomDelete(self):
+        room1 = ChatRoom.objects.get(name="room 1")
+        chats = ChatMessage.objects.filter(room=room1)
+        self.assertEqual(len(chats), 4)
+        room1.delete()
+        chats = ChatMessage.objects.filter(room=room1)
+        self.assertEqual(len(chats), 0)
+
 
     

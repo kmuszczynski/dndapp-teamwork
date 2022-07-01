@@ -8,11 +8,12 @@
     <h1>Create new character</h1>
         <div class="crispy-input create-char-form">
             <div class="button-list">
+                <div id="select-file-button">
                 <label for="selectedFile">
-                    Select file
+                    <h3>Upload your character here!</h3>
                     <input id="selectedFile" type="file" value="Upload"/>
-                  </label>
-                <button id="upload" class="btn-basic">Upload</button>
+                </label>
+                </div>
             <form method="POST">
                 {% csrf_token %}
                 {{ form|crispy }}

@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html>
 
-<head>
-    <meta charset="utf-8" />
-    <title>Error Page</title>
-</head>
+{% extends 'home/menu.html' %}
 
-<body>
-    <div>Error Page!!!</div>
-    <a class="home" href="{% url 'home' %}">Return home</a>
-</body>
-
-</html>
+{% block main %}
+<div>
+    <br><br>
+    <h2>Access not provided!</h2>
+    <form method="POST">
+        </div>
+        <a class="btn-basic" href="{% url 'home' %}">Back</a>
+    </form>
+</div>
+{% endblock main %}
