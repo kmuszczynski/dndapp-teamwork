@@ -58,7 +58,7 @@ class ContextTestCase(TestCase):
         rooms = ChatRoom.objects.all()
         self.assertEqual(response.context['rooms'][0], rooms[0])
 
-# create character 
+# edit character 
 
     def test_Update_Character(self):
         user1 = User.objects.get(username='testuser')
