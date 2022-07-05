@@ -69,7 +69,7 @@ chatSocket.onmessage = function(e) {
             for (var j = 0; j < x; j++){
                 var element = document.createElement('div'); element.className = "element";
                 element.id = 'x' + j + 'y' + i;
-                element.setAttribute("onclick", 'active(' + element.id + ')');
+                element.setAttribute("onclick", "active(" + "'" + element.id + "'" + ')');
                 row.appendChild(element);
             }
             board.appendChild(row);
@@ -108,6 +108,9 @@ chatSocket.onmessage = function(e) {
             if (active_user[0] == data.user) {
                 new_element.style.borderColor = "red";
             }
+        }
+        else {
+            create_chat();
         }
     }
     else if (data.type == "message") {
