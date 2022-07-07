@@ -16,4 +16,3 @@ technologies used: django, channels
 - [x] Implement database access from chat level
 - [X] Finish and fill up the database
 - [X] Front-end
- <3
